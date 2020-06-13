@@ -7,22 +7,35 @@ const firebaseStorageBucketUrlBuffer = new Buffer(process.env.FIREBASE_STORAGE_B
 
 type PetType = 'dog' | 'pet';
 
+interface Ong {
+  name: string;
+  email: string;
+  phone: string;
+}
+
 interface Pet {
   name: string;
   type: PetType;
+  ongRef: FirebaseFirestore.DocumentReference<Ong>,
+  description: string;
 }
 
 interface PetDTO {
   name: string;
   type: PetType;
   id: string;
+  ong: OngDTO;
+  description: string;
   photoUrl: string;
 }
 
+interface OngDTO {
+  name: string;
+  email: string;
+  phone: string;
+}
+
 async function getPets(): Promise<PetDTO[]> {
-  console.log(process.env.GCLOUD_CREDENTIALS);
-  console.log(process.env.FIREBASE_DATABASE_URL);
-  console.log(process.env.FIREBASE_STORAGE_BUCKET_NAME);
   const snapshots: FirebaseFirestore.QuerySnapshot = await firestore
     .collection('pets')
     .get();
@@ -32,9 +45,12 @@ async function getPets(): Promise<PetDTO[]> {
     const petPhoto = await storage
       .file(`pets/${doc.id}.jpg`)
       .getSignedUrl({ action: 'read', expires: '03-17-2025' });
+    const { ongRef, ...petData } = doc.data();
+    const ongData = await ongRef.get();
     const pet: PetDTO = {
-      ...doc.data() as Pet,
+      ...petData as Pet,
       id: docId,
+      ong: ongData.data(),
       photoUrl: petPhoto[0],
     }
     pets = [...pets, pet];
