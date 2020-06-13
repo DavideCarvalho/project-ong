@@ -3,5 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 
 export default (req: NextApiRequest, res: NextApiResponse) => {
-  res.status(200).json(process.env);
+  if (req.method === 'GET') {
+    res.status(200).json({ status: 'ok' });
+  }
 };
