@@ -16,6 +16,7 @@ interface PetDTO {
 }
 
 async function getPets(): Promise<PetDTO[]> {
+  // console.log('bucket exists', await storage.exists());
   const snapshots: FirebaseFirestore.QuerySnapshot = await firestore
     .collection('pets')
     .get();
