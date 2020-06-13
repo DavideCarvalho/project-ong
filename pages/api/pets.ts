@@ -8,9 +8,9 @@ interface Pets {
   type: PetType;
 }
 
-async function getPets(): Promise<Array<FirebaseFirestore.QueryDocumentSnapshot<Pets>>> {
-  const data = await firestore.collection('/pets').get();
-  return data.docs as Array<FirebaseFirestore.QueryDocumentSnapshot<Pets>>;
+async function getPets(): Promise<Array<Pets>> {
+  const snapshots: FirebaseFirestore.QuerySnapshot = await firestore.collection('pets').get();
+  return snapshots.docs.map(doc => doc.data()) as Array<Pets>;
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
