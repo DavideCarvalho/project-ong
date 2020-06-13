@@ -20,7 +20,7 @@ export const PetsListContainer = () => {
   return (
     <div className="columns">
       {data.map((pet) => (
-        <div className="column is-one-third">
+        <div className="column is-one-quarter">
           <CardWithPhoto
             key={pet.id}
             description={pet.description}

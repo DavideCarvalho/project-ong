@@ -14,7 +14,7 @@ export const CardWithPhoto: React.FC<Props> = ({
   return (
     <div className="card">
       <div className="card-image">
-        <figure className="image is-4by3">
+        <figure className="image">
           <img src={imageUrl} alt="Placeholder image" />
         </figure>
       </div>
@@ -23,7 +23,7 @@ export const CardWithPhoto: React.FC<Props> = ({
           <div className="media-left">
             <figure className="image is-48x48">
               <img
-                src="https://bulma.io/images/placeholders/96x96.png"
+                src={imageUrl}
                 alt="Placeholder image"
               />
             </figure>
