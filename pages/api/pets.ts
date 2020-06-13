@@ -20,6 +20,9 @@ interface PetDTO {
 }
 
 async function getPets(): Promise<PetDTO[]> {
+  console.log(process.env.GCLOUD_CREDENTIALS);
+  console.log(process.env.FIREBASE_DATABASE_URL);
+  console.log(process.env.FIREBASE_STORAGE_BUCKET_NAME);
   const snapshots: FirebaseFirestore.QuerySnapshot = await firestore
     .collection('pets')
     .get();
