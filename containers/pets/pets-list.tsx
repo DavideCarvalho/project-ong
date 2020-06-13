@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { CardWithPhoto } from './card';
+import { CardWithPhoto } from '../../components/card-with-photo';
 
 const getPets = url => fetch(url).then(_ => _.json());
 
