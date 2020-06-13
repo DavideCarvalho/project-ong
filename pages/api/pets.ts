@@ -47,7 +47,7 @@ interface OngDTO {
   name: string;
   email: string;
   phone: string;
-  city: CityDTO;
+  city: string;
 }
 
 interface CityDTO {
@@ -71,7 +71,7 @@ async function getPets(): Promise<PetDTO[]> {
     const pet: PetDTO = {
       ...petData,
       id: docId,
-      ong: { ...ongData, city: cityValue.data() },
+      ong: { ...ongData, city: cityValue.data().name },
       photoUrl: petPhoto[0],
     };
     pets = [...pets, pet];
