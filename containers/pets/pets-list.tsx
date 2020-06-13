@@ -4,15 +4,22 @@ import { CardWithPhoto } from '../../components/card-with-photo';
 
 const getPets = (url) => fetch(url).then((_) => _.json());
 
-interface Pets {
+interface Ong {
+  name: string;
+  email: string;
+  phone: string;
+}
+
+interface Pet {
   name: string;
   id: string;
   photoUrl: string;
   description: string;
+  ong: Ong;
 }
 
 export const PetsListContainer = () => {
-  const { data, error } = useSWR<Pets[]>('/api/pets', getPets);
+  const { data, error } = useSWR<Pet[]>('/api/pets', getPets);
   console.log(data, error);
   if (error)
     return <div className="has-text-centered">Erro ao carregar os pets</div>;
@@ -26,7 +33,8 @@ export const PetsListContainer = () => {
             petDescription={pet.description}
             petImageUrl={pet.photoUrl}
             petName={pet.name}
-            ongName={""}
+            ongName={pet.ong.name}
+            ongPhone={pet.ong.phone}
           />
         </div>
       ))}
