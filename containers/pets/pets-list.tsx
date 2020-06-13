@@ -23,9 +23,10 @@ export const PetsListContainer = () => {
         <div className="column is-one-quarter">
           <CardWithPhoto
             key={pet.id}
-            description={pet.description}
-            imageUrl={pet.photoUrl}
-            name={pet.name}
+            petDescription={pet.description}
+            petImageUrl={pet.photoUrl}
+            petName={pet.name}
+            ongName={""}
           />
         </div>
       ))}
