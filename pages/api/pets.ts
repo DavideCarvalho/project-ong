@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { firestore } from './config/firebase';
+import { firestore, storage } from './config/firebase';
 
 type PetType = 'dog' | 'pet';
 
-interface PetDTO {
+interface Pet {
   name: string;
   type: PetType;
 }
@@ -12,16 +12,27 @@ interface PetDTO {
   name: string;
   type: PetType;
   id: string;
+  photoUrl: any;
 }
 
-async function getPets(): Promise<Array<PetDTO>> {
-  const snapshots: FirebaseFirestore.QuerySnapshot = await firestore.collection('pets').get();
-  return snapshots.docs.map(doc => {
-    return {
-      id: doc.id,
-      ...doc.data(),
+async function getPets(): Promise<PetDTO[]> {
+  const snapshots: FirebaseFirestore.QuerySnapshot = await firestore
+    .collection('pets')
+    .get();
+  let pets: PetDTO[] = [];
+  for (const doc of snapshots.docs) {
+    const docId = doc.id;
+    const petPhoto = await storage
+      .file(`/pets/${doc.id}`)
+      .getSignedUrl({ action: 'read', expires: '03-17-2025' });
+    const pet: PetDTO = {
+      ...doc.data() as Pet,
+      id: docId,
+      photoUrl: petPhoto,
     }
-  }) as Array<PetDTO>;
+    pets = [...pets, pet];
+  }
+  return pets;
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
