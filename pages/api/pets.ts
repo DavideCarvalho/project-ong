@@ -16,7 +16,7 @@ interface PetDTO {
   name: string;
   type: PetType;
   id: string;
-  photoUrl: any;
+  photoUrl: string;
 }
 
 async function getPets(): Promise<PetDTO[]> {
