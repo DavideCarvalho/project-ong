@@ -11,8 +11,8 @@ const PetsPage = () => {
       <div style={{ marginTop: '5%' }}>
         <SearchForm />
       </div>
-      <div>
-        <PetsListContainer style={{ marginTop: '5%' }} />
+      <div style={{ marginTop: '5%' }}>
+        <PetsListContainer />
       </div>
     </div>
   );
