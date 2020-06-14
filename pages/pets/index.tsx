@@ -8,8 +8,12 @@ const PetsPage = () => {
       <div className="has-text-centered" style={{ marginTop: '5%' }}>
         <h1 className="title is-1">DONG</h1>
       </div>
-      <SearchForm />
-      <PetsListContainer />
+      <div style={{ marginTop: '5%' }}>
+        <SearchForm />
+      </div>
+      <div>
+        <PetsListContainer style={{ marginTop: '5%' }} />
+      </div>
     </div>
   );
 };
