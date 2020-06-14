@@ -51,10 +51,6 @@ interface OngDTO {
   city: string;
 }
 
-interface CityDTO {
-  name: string;
-}
-
 async function parsePetsSnapshot(
   docs: FirebaseFirestore.QueryDocumentSnapshot<Pet>[]
 ): Promise<PetDTO[]> {
