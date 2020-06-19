@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { firestore, storage } from './config/firebase';
+import {auth, firestore, storage} from '../config/firebase';
 
-type PetType = 'dog' | 'pet';
+type PetType = 'dog' | 'cat' | 'other';
 
 interface City {
   name: string;
@@ -62,39 +62,32 @@ async function parsePetsSnapshot(
   return pets;
 }
 
-async function getAllPets() {
-  const snapshots: FirebaseFirestore.QuerySnapshot<Pet> = (await firestore
-    .collection('pets')
-    .get()) as FirebaseFirestore.QuerySnapshot<Pet>;
-  return parsePetsSnapshot(snapshots.docs);
-}
-
-async function getPetsByCities(cities: string[]): Promise<any> {
-  let pets = [];
-  for (const city of cities) {
-    const cityRef: FirebaseFirestore.DocumentReference<City> = firestore
-      .collection('cities')
-      .doc(city.toLowerCase()) as FirebaseFirestore.DocumentReference<City>;
-    const petsSnapshot: FirebaseFirestore.QuerySnapshot<Pet> = (await firestore
-      .collection('pets')
-      .where('cityRef', '==', cityRef)
-      .get()) as FirebaseFirestore.QuerySnapshot<Pet>;
-    const parsedPets = await parsePetsSnapshot(petsSnapshot.docs);
-    pets = [...pets, ...parsedPets];
-  }
-  return pets;
-}
-
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'GET') {
-    if (!req.query.city) {
-      const pets: Array<PetDTO> = await getAllPets();
+    const tokenId: string = req.headers.tokenid as string;
+    if (!tokenId)
+      return res.status(401).json({
+        message: `You don't have permission to access this resource`,
+      });
+    try {
+      const token = await auth.verifyIdToken(tokenId);
+      const ongData: FirebaseFirestore.QuerySnapshot<Ong> = await firestore
+        .collection('ongs')
+        .where('email', '==', token.email)
+        .get() as FirebaseFirestore.QuerySnapshot<Ong>;
+      const ongRef = await firestore
+        .collection('ongs')
+        .doc(ongData.docs[0].id);
+      const petsSnapshot: FirebaseFirestore.QuerySnapshot<Pet> = (await firestore
+        .collection('pets')
+        .where('ongRef', '==', ongRef)
+        .get()) as FirebaseFirestore.QuerySnapshot<Pet>;
+      const pets = await parsePetsSnapshot(petsSnapshot.docs)
       return res.status(200).json(pets);
+    } catch (e) {
+      return res.status(401).json({
+        message: `You don't have permission to access this resource`,
+      })
     }
-    let cities = !Array.isArray(req.query.city)
-      ? [req.query.city]
-      : req.query.city;
-    const pets: Array<PetDTO> = await getPetsByCities(cities);
-    return res.status(200).json(pets);
   }
 };
