@@ -19,6 +19,7 @@ const OngPetsPage: NextPage<Props> = ({ tokenId }) => {
 };
 
 OngPetsPage.getInitialProps = async(context) => {
+  console.log(context);
   return { tokenId: context.query.tokenId as string };
 };
 
