@@ -1,7 +1,15 @@
+import { ToastContainer } from 'react-toastify';
 import 'bulma/css/bulma.min.css';
+import 'animate.css/animate.min.css';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+  return (
+    <>
+      <ToastContainer />
+      <Component {...pageProps} />
+    </>
+  );
 }
 
 // Only uncomment this method if you have blocking data requirements for

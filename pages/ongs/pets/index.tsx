@@ -1,26 +1,18 @@
 import React from 'react';
-import {OngPetsListContainer} from "../../../containers/ongs/ong-pet-list";
-import {NextPage} from "next";
+import { OngPetsListContainer } from '../../../containers/ongs/ong-pet-list';
+import { NextPage } from 'next';
 
-interface Props {
-  tokenId: string;
-}
+interface Props {}
 
-
-const OngPetsPage: NextPage<Props> = ({ tokenId }) => {
+const OngPetsPage: NextPage<Props> = () => {
   return (
     <div className="container">
       <div className="has-text-centered" style={{ marginTop: '5%' }}>
         <h1 className="title is-1">Seus bichanos</h1>
-        <OngPetsListContainer tokenId={tokenId} />
+        <OngPetsListContainer />
       </div>
     </div>
   );
-};
-
-OngPetsPage.getInitialProps = async(context) => {
-  console.log(context);
-  return { tokenId: context.query.tokenId as string };
 };
 
 export default OngPetsPage;

@@ -12,14 +12,11 @@ let auth: firebase.auth.Auth;
 let analytics: firebase.analytics.Analytics;
 
 export const firebaseInstance = () => {
-  if (firestore && auth && analytics) {
-    return { firestore, auth, analytics };
-  }
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
-    analytics = firebase.analytics();
-    firestore = firebase.firestore();
-    auth = firebase.auth();
   }
+  analytics = firebase.analytics();
+  firestore = firebase.firestore();
+  auth = firebase.auth();
   return { firestore, auth, analytics };
 };

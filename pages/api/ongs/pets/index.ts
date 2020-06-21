@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import {auth, firestore, storage} from '../config/firebase';
+import {auth, firestore, storage} from '../../config/firebase';
 
 type PetType = 'dog' | 'cat' | 'other';
 
