@@ -9,31 +9,31 @@
     "vercel:dev": "vercel dev"
   },
   "dependencies": {
-    "@creativebulma/bulma-tooltip": "^1.2.0",
-    "animate.css": "^4.1.0",
+    "@creativebulma/bulma-tooltip": "1.2.0",
+    "animate.css": "4.1.0",
     "bulma": "0.9.0",
-    "firebase": "^7.15.1",
+    "firebase": "7.15.1",
     "firebase-admin": "8.12.1",
-    "formik": "^2.1.4",
+    "formik": "2.1.4",
     "next": "9.4.4",
-    "nookies": "^2.3.1",
-    "pubsub-js": "^1.8.0",
+    "nookies": "2.3.1",
+    "pubsub-js": "1.8.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "react-select": "^3.1.0",
-    "react-toastify": "^6.0.5",
-    "rodal": "^1.8.1",
-    "swr": "^0.2.3",
-    "yup": "^0.29.1"
+    "react-select": "3.1.0",
+    "react-toastify": "6.0.5",
+    "rodal": "1.8.1",
+    "swr": "0.2.3",
+    "yup": "0.29.1"
   },
   "devDependencies": {
-    "@types/cookie": "^0.4.0",
+    "@types/cookie": "0.4.0",
     "@types/node": "14.0.13",
-    "@types/pubsub-js": "^1.8.0",
+    "@types/pubsub-js": "1.8.0",
     "@types/react": "16.9.36",
-    "@types/react-select": "^3.0.13",
-    "@types/yup": "^0.29.3",
-    "prettier": "^2.0.5",
+    "@types/react-select": "3.0.13",
+    "@types/yup": "0.29.3",
+    "prettier": "2.0.5",
     "typescript": "3.9.5"
   }
 }
