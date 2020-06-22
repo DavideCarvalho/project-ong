@@ -1,20 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { firestore, storage } from './config/firebase';
 
-const gCloudCredentialsBuffer = new Buffer(
-  process.env.GCLOUD_CREDENTIALS,
-  'base64'
-);
-const firebaseDatabaseUrlBuffer = new Buffer(
-  process.env.FIREBASE_DATABASE_URL,
-  'base64'
-);
-const firebaseStorageBucketUrlBuffer = new Buffer(
-  process.env.FIREBASE_STORAGE_BUCKET_NAME,
-  'base64'
-);
-
-type PetType = 'dog' | 'pet';
+type PetType = 'dog' | 'cat' | 'other';
 
 interface City {
   name: string;
@@ -78,6 +65,7 @@ async function parsePetsSnapshot(
 async function getAllPets() {
   const snapshots: FirebaseFirestore.QuerySnapshot<Pet> = (await firestore
     .collection('pets')
+    .where('deleted', '==', 'false')
     .get()) as FirebaseFirestore.QuerySnapshot<Pet>;
   return parsePetsSnapshot(snapshots.docs);
 }
@@ -90,6 +78,7 @@ async function getPetsByCities(cities: string[]): Promise<any> {
       .doc(city.toLowerCase()) as FirebaseFirestore.DocumentReference<City>;
     const petsSnapshot: FirebaseFirestore.QuerySnapshot<Pet> = (await firestore
       .collection('pets')
+      .where('deleted', '==', false)
       .where('cityRef', '==', cityRef)
       .get()) as FirebaseFirestore.QuerySnapshot<Pet>;
     const parsedPets = await parsePetsSnapshot(petsSnapshot.docs);
