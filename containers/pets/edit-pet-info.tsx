@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
@@ -26,27 +26,24 @@ interface Pet {
   type: PetTypeName;
 }
 
-const getPetById = (url, dogId, tokenId) =>
-  fetch(`${url}/${dogId}`, { headers: new Headers({ tokenId }) }).then((res) =>
-    res.json()
-  );
+const getPetById = (url, dogId) =>
+  fetch(`${url}/${dogId}`).then((res) => res.json());
 
-const updatePetById = (url, dogId, tokenId, body) => {
+const updatePetById = (url, dogId, body) => {
   return fetch(`${url}/${dogId}`, {
     method: 'PUT',
     headers: new Headers({
-      tokenId,
       'content-type': 'application/json',
     }),
     body: JSON.stringify(body),
   }).then((res) => res.json());
 };
 
-export const EditDogInfoContainer: React.FC<Props> = () => {
-  const { dogId, tokenId } = useContext(EditPetByIdContext);
+export const EditPetInfoContainer: React.FC<Props> = () => {
+  const { dogId } = useContext(EditPetByIdContext);
   const router = useRouter();
   const { data, error } = useSWR<Pet>(
-    ['/api/ongs/pets', dogId, tokenId],
+    () => ['/api/ongs/pets', dogId],
     getPetById
   );
   const formik = useFormik({
@@ -66,14 +63,14 @@ export const EditDogInfoContainer: React.FC<Props> = () => {
       if (values.file) {
         body.file = values.file;
       }
-      updatePetById('/api/ongs/pets', dogId, tokenId, body).then((res) => {
+      updatePetById('/api/ongs/pets', dogId, body).then((res) => {
         toast('Pet atualizado!', {
           position: 'top-center',
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
         });
-        // router.push(`/ongs/pets?tokenId=${tokenId}`)
+        router.push(`/ongs/pets`);
       });
     },
   });
@@ -189,7 +186,7 @@ export const EditDogInfoContainer: React.FC<Props> = () => {
           </div>
           <div className="field is-horizontal">
             <div className="field-label is-normal">
-              <label className="label">Descrição</label>
+              <label className="label">Tipo do pet</label>
             </div>
             <div className="field-body">
               <div className="field">

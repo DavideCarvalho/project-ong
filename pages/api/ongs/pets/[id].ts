@@ -21,6 +21,7 @@ interface Ong {
 interface Pet {
   name: string;
   description: string;
+  deleted: boolean;
   ongRef: FirebaseFirestore.DocumentReference<Ong>;
   cityRef: FirebaseFirestore.DocumentReference<City>;
   typeRef: FirebaseFirestore.DocumentReference<PetType>;
@@ -44,13 +45,13 @@ interface OngDTO {
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'GET') {
-    const tokenId: string = req.headers.tokenid as string;
+    const tokenId: string = req.cookies.authToken;
     if (!tokenId)
       return res.status(401).json({
         message: `You don't have permission to access this resource`,
       });
     try {
-      await auth.verifyIdToken(tokenId);
+      await auth.verifySessionCookie(tokenId);
       const dogId: string = req.query.id as string;
       if (!dogId)
         return res.status(400).json({
@@ -93,13 +94,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
   }
   if (req.method === 'PUT') {
-    const tokenId: string = req.headers.tokenid as string;
+    const tokenId: string = req.cookies.authToken;
     if (!tokenId)
       return res.status(401).json({
         message: `You don't have permission to access this resource`,
       });
     try {
-      await auth.verifyIdToken(tokenId);
+      await auth.verifySessionCookie(tokenId);
     } catch (e) {
       return res.status(401).json({
         message: `You don't have permission to access this resource`,
@@ -149,5 +150,26 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       });
     }
     return res.status(200).json({ message: 'Pet updated successfully' });
+  }
+  if (req.method === 'DELETE') {
+    const tokenId: string = req.cookies.authToken;
+    if (!tokenId)
+      return res.status(401).json({
+        message: `You don't have permission to access this resource`,
+      });
+    try {
+      await auth.verifySessionCookie(tokenId);
+    } catch (e) {
+      return res.status(401).json({
+        message: `You don't have permission to access this resource`,
+      });
+    }
+    const dogId: string = req.query.id as string;
+    if (!dogId)
+      return res.status(400).json({
+        message: 'ID is empty',
+      });
+    await firestore.collection('pets').doc(dogId).update({ deleted: true });
+    return res.status(200).json({ message: 'Pet deleted successfully' });
   }
 };

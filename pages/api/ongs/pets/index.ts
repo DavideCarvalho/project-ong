@@ -1,7 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import {auth, firestore, storage} from '../../config/firebase';
+import { auth, firestore, storage } from '../../config/firebase';
 
-type PetType = 'dog' | 'cat' | 'other';
+type PetTypeName = 'dog' | 'cat' | 'other';
+
+interface PetType {
+  name: PetTypeName;
+}
 
 interface City {
   name: string;
@@ -17,7 +21,8 @@ interface Ong {
 interface Pet {
   name: string;
   description: string;
-  type: PetType;
+  deleted: boolean;
+  typeRef: FirebaseFirestore.DocumentReference<PetType>;
   ongRef: FirebaseFirestore.DocumentReference<Ong>;
   cityRef: FirebaseFirestore.DocumentReference<City>;
 }
@@ -47,8 +52,9 @@ async function parsePetsSnapshot(
     const petPhoto = await storage
       .file(`pets/${doc.id}.jpg`)
       .getSignedUrl({ action: 'read', expires: '03-17-2025' });
-    const { ongRef, cityRef: petCityRef, ...petData } = doc.data();
+    const { ongRef, cityRef: petCityRef, typeRef, ...petData } = doc.data();
     const ongValue = await ongRef.get();
+    const typeValue = await typeRef.get();
     const { cityRef, ...ongData }: Ong = ongValue.data();
     const cityValue = await cityRef.get();
     const pet: PetDTO = {
@@ -56,6 +62,7 @@ async function parsePetsSnapshot(
       id: docId,
       ong: { ...ongData, city: cityValue.data().name },
       photoUrl: petPhoto[0],
+      type: typeValue.data().name,
     };
     pets = [...pets, pet];
   }
@@ -64,30 +71,30 @@ async function parsePetsSnapshot(
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'GET') {
-    const tokenId: string = req.headers.tokenid as string;
+    const tokenId: string = req.cookies.authToken;
     if (!tokenId)
       return res.status(401).json({
         message: `You don't have permission to access this resource`,
       });
     try {
-      const token = await auth.verifyIdToken(tokenId);
-      const ongData: FirebaseFirestore.QuerySnapshot<Ong> = await firestore
+      const token = await auth.verifySessionCookie(tokenId);
+      const ongData: FirebaseFirestore.QuerySnapshot<Ong> = (await firestore
         .collection('ongs')
         .where('email', '==', token.email)
-        .get() as FirebaseFirestore.QuerySnapshot<Ong>;
-      const ongRef = await firestore
-        .collection('ongs')
-        .doc(ongData.docs[0].id);
+        .get()) as FirebaseFirestore.QuerySnapshot<Ong>;
+      const ongRef = await firestore.collection('ongs').doc(ongData.docs[0].id);
       const petsSnapshot: FirebaseFirestore.QuerySnapshot<Pet> = (await firestore
         .collection('pets')
         .where('ongRef', '==', ongRef)
+        .where('deleted', '==', false)
         .get()) as FirebaseFirestore.QuerySnapshot<Pet>;
-      const pets = await parsePetsSnapshot(petsSnapshot.docs)
+      const pets = await parsePetsSnapshot(petsSnapshot.docs);
       return res.status(200).json(pets);
     } catch (e) {
+      console.log(e);
       return res.status(401).json({
         message: `You don't have permission to access this resource`,
-      })
+      });
     }
   }
 };
