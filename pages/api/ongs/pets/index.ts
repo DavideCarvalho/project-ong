@@ -29,11 +29,11 @@ interface Pet {
 
 interface PetDTO {
   name: string;
-  type: PetType;
   id: string;
-  ong: OngDTO;
   description: string;
   photoUrl: string;
+  ong: OngDTO;
+  type: PetTypeName;
 }
 
 interface OngDTO {
