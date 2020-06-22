@@ -1,4 +1,4 @@
-import { auth } from './../../config/firebase';
+import { auth } from '../../config/firebase';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { setCookie } from 'nookies';
 import { CookieSerializeOptions } from 'cookie';

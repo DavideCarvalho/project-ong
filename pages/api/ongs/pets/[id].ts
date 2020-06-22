@@ -127,13 +127,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const petData = {
       name: req.body.name || petDoc.data().name,
       description: req.body.description || petDoc.data().description,
-      type: animalsTypeDoc
+      typeRef: animalsTypeDoc
         ? firestore.collection('animals-type').doc(animalsTypeDoc.id)
         : petDoc.data().typeRef,
       ongRef: petDoc.data().ongRef,
       cityRef: petDoc.data().cityRef,
     };
-    firestore.collection('pets').doc(petDoc.id).update(petData);
+    await firestore.collection('pets').doc(petDoc.id).update(petData);
     if (req.body.file) {
       const image = req.body.file;
       const base64EncodedImageString = image.replace(

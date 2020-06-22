@@ -10,10 +10,21 @@ const getOngPets = (url: string) => fetch(url).then((res) => res.json());
 const deleteOngPet = (url: string, dogId: string) =>
   fetch(`${url}/${dogId}`, { method: 'DELETE' }).then((res) => res.json());
 
+
+const getOngData = (url) =>
+  fetch(url).then((res) => res.json());
+
 interface Ong {
   name: string;
   email: string;
   phone: string;
+}
+
+interface OngData {
+  name: string;
+  email: string;
+  phone: string;
+  id: string;
 }
 
 type PetType = 'dog' | 'cat' | 'other';
@@ -34,6 +45,7 @@ const parsePetTypeText = (petType) => {
 };
 
 export const OngPetsListContainer: React.FC = () => {
+  const { data: ong } = useSWR<OngData>('/api/ongs', getOngData);
   const [modalState, setModalState] = useState({
     visible: false,
     dogName: '',
@@ -85,6 +97,49 @@ export const OngPetsListContainer: React.FC = () => {
   if (!data) return <div className="has-text-centered">Carregando os pets</div>;
   return (
     <>
+      <style jsx>{`
+        .image-container {
+          position: relative;
+        }
+        .image-container .after {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          color: #fff;
+          transition: 0.5s ease;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background: rgba(0, 0, 0, 0.6);
+          cursor: pointer;
+          opacity: 0;
+        }
+        .image-container:hover .after {
+          opacity: 1;
+        }
+
+        @media only screen and (max-width: 801px) {
+          .image-container {
+            position: relative;
+          }
+          .image-container .after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.6);
+            cursor: pointer;
+            opacity: 1;
+          }
+        }
+      `}</style>
       <Rodal
         visible={modalState.visible}
         animation="zoom"
@@ -127,6 +182,26 @@ export const OngPetsListContainer: React.FC = () => {
         </div>
       </Rodal>
       <div className="columns">
+        <div className="column is-one-quarter">
+          <div className="add-pet-hover image-container">
+            <Link href={`/ongs/pets/create`}>
+              <a>
+                <CardWithPhoto
+                  petDescription={'Descrição do pet'}
+                  petImageUrl={
+                    'https://i.insider.com/5df126b679d7570ad2044f3e?width=1100&format=jpeg&auto=webp'
+                  }
+                  petName={'Nome do pet'}
+                  ongName={ong?.name}
+                  ongPhone={ong?.phone}
+                />
+                <div className="after">
+                  <p>Adicionar novo pet</p>
+                </div>
+              </a>
+            </Link>
+          </div>
+        </div>
         {Array.isArray(data) &&
           data.map((pet) => (
             <div key={pet.id} className="column is-one-quarter">

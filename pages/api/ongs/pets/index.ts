@@ -91,10 +91,56 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       const pets = await parsePetsSnapshot(petsSnapshot.docs);
       return res.status(200).json(pets);
     } catch (e) {
-      console.log(e);
       return res.status(401).json({
         message: `You don't have permission to access this resource`,
       });
     }
+  }
+  if (req.method === 'POST') {
+    const tokenId: string = req.cookies.authToken;
+    if (!tokenId)
+      return res.status(401).json({
+        message: `You don't have permission to access this resource`,
+      });
+    let user;
+    try {
+      user = await auth.verifySessionCookie(tokenId);
+    } catch (e) {
+      return res.status(401).json({
+        message: `You don't have permission to access this resource`,
+      });
+    }
+    const ongQuery: FirebaseFirestore.QuerySnapshot<Ong> = (await firestore
+      .collection('ongs')
+      .where('email', '==', user.email)
+      .get()) as FirebaseFirestore.QuerySnapshot<Ong>;
+
+    const ongData: Ong = ongQuery.docs[0].data();
+    const typeQuery = await firestore
+      .collection('animal-types')
+      .where('name', '==', req.body.type)
+      .get();
+    const pet = await firestore.collection('pets').add({
+      name: req.body.name,
+      description: req.body.description,
+      typeRef: typeQuery.docs[0].ref,
+      ongRef: ongQuery.docs[0].ref,
+      cityRef: ongData.cityRef,
+      deleted: false,
+    });
+    const image = req.body.file;
+    const base64EncodedImageString = image.replace(
+      /^data:image\/\w+;base64,/,
+      ''
+    );
+    const mimeType = image.match(
+      /data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).*,.*/
+    )[1];
+    const imageBuffer = new Buffer(base64EncodedImageString, 'base64');
+    await storage.file(`pets/${pet.id}.jpg`).save(imageBuffer, {
+      metadata: { contentType: mimeType },
+      validation: 'md5',
+    });
+    return res.status(200).json({ message: 'Pet created successfully' });
   }
 };
