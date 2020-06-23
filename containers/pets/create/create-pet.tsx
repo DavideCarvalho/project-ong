@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import { useFormik } from 'formik';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
@@ -38,16 +39,11 @@ const CreatePetSchema = Yup.object().shape({
     .required('Tipo do pet é obrigatório'),
 });
 
-const getOngData = (url) => fetch(url).then((res) => res.json());
+const getOngData = (url): Promise<OngData> =>
+  axios.get<OngData>(url).then((res) => res.data);
 
 const createPet = (url, body) => {
-  return fetch(url, {
-    method: 'POST',
-    headers: new Headers({
-      'content-type': 'application/json',
-    }),
-    body: JSON.stringify(body),
-  }).then((res) => res.json());
+  return axios.post(url, body).then((res) => res.data);
 };
 
 export const CreatePetContainer = () => {

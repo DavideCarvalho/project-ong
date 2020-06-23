@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import useSWR, { mutate } from 'swr';
+import axios, { AxiosResponse } from 'axios';
 import Link from 'next/link';
 import Rodal from 'rodal';
 import { toast } from 'react-toastify';
 import { CardWithPhoto } from '../../components/card-with-photo';
 
-const getOngPets = (url: string) => fetch(url).then((res) => res.json());
+const getOngPets = (url: string): Promise<Pet[]> =>
+  axios.get(url).then((res) => res.data);
 
-const deleteOngPet = (url: string, dogId: string) =>
-  fetch(`${url}/${dogId}`, { method: 'DELETE' }).then((res) => res.json());
+const deleteOngPet = (url: string, dogId: string): Promise<AxiosResponse> =>
+  axios.delete(`${url}/${dogId}`).then((res) => res.data);
 
-
-const getOngData = (url) =>
-  fetch(url).then((res) => res.json());
+const getOngData = (url): Promise<OngData> =>
+  axios.get(url).then((res) => res.data);
 
 interface Ong {
   name: string;

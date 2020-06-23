@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import axios, { AxiosError } from 'axios';
 import useSWR from 'swr';
 import { CardWithPhoto } from '../../components/card-with-photo';
 import PubSub from 'pubsub-js';
 
-const getPets = (url, cities) =>
-  fetch(`${url}${cities}`).then((res) => res.json());
+const getPets = async (url, cities): Promise<Pet[]> => {
+  const response = await axios.get<Pet[]>(`${url}${cities}`);
+  return response.data;
+};
 
 interface Ong {
   name: string;
@@ -38,12 +41,15 @@ export const PetsListContainer = () => {
       }
     );
   }, []);
-  const { data, error } = useSWR<Pet[]>(['/api/pets', cities], getPets);
+  const { data, error } = useSWR<Pet[], AxiosError>(
+    ['/api/pets', cities],
+    getPets
+  );
   if (error)
     return <div className="has-text-centered">Erro ao carregar os pets</div>;
   if (!data) return <div className="has-text-centered">Carregando os pets</div>;
   return (
-    <div className="columns">
+    <div className="columns is-multiline">
       {data.map((pet) => (
         <div key={pet.id} className="column is-one-quarter">
           <CardWithPhoto
