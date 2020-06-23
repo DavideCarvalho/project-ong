@@ -6,6 +6,9 @@ import { toast } from 'react-toastify';
 import { CardWithPhoto } from '../../components/card-with-photo';
 import { EditPetByIdContext } from '../../pages/ongs/pets/edit/[id]';
 import { SelectPetType } from '../../components/select-pet-type';
+import { InlineInputField } from '../../components/inline-input-field';
+import { InlineTextAreaField } from '../../components/inline-text-area-field';
+import { InlineField } from '../../components/inline-field';
 
 interface Props {}
 
@@ -46,7 +49,14 @@ export const EditPetInfoContainer: React.FC<Props> = () => {
     () => ['/api/ongs/pets', dogId],
     getPetById
   );
-  const formik = useFormik({
+  const {
+    values,
+    handleChange,
+    handleSubmit,
+    errors,
+    setValues,
+    setFieldValue,
+  } = useFormik({
     initialValues: {
       name: '',
       description: '',
@@ -76,7 +86,7 @@ export const EditPetInfoContainer: React.FC<Props> = () => {
   });
   useEffect(() => {
     if (!data) return;
-    formik.setValues({
+    setValues({
       name: data.name,
       description: data.description,
       currentFile: data.photoUrl,
@@ -90,7 +100,7 @@ export const EditPetInfoContainer: React.FC<Props> = () => {
     let reader = new FileReader();
     let file = event.target.files[0];
     reader.onloadend = () => {
-      formik.setFieldValue('file', reader.result);
+      setFieldValue('file', reader.result);
     };
     reader.readAsDataURL(file);
   };
@@ -113,114 +123,60 @@ export const EditPetInfoContainer: React.FC<Props> = () => {
       <div className="column is-one-quarter">
         <CardWithPhoto
           ongName={data.ong.name}
-          petName={formik.values.name}
-          petImageUrl={formik.values.file || formik.values.currentFile}
-          petDescription={formik.values.description}
+          petName={values.name}
+          petImageUrl={values.file || values.currentFile}
+          petDescription={values.description}
           ongPhone={data.ong.phone}
         />
       </div>
       <div className="column is-three-quarters">
-        <form onSubmit={formik.handleSubmit}>
-          <div className="field is-horizontal">
-            <div className="field-label is-normal">
-              <label className="label">Nome</label>
+        <form onSubmit={handleSubmit}>
+          <InlineInputField
+            label={'Nome'}
+            handleChange={handleChange}
+            error={errors.name}
+            value={values.name}
+            name={'name'}
+            type={'text'}
+          />
+          <InlineTextAreaField
+            label={'Descrição'}
+            handleChange={handleChange}
+            error={errors.description}
+            value={values.description}
+            name={'description'}
+          />
+          <InlineField label={'Foto do pet'} error={errors.file}>
+            <div className="file has-name">
+              <label className="file-label">
+                <input
+                  onChange={handleChangePhoto}
+                  className="file-input"
+                  type="file"
+                  name="resume"
+                />
+                <span className="file-cta">
+                  <span className="file-icon">
+                    <i className="fas fa-upload" />
+                  </span>
+                  <span className="file-label">Troque a foto do pet</span>
+                </span>
+              </label>
             </div>
-            <div className="field-body">
-              <div className="field">
-                <div className="control">
-                  <input
-                    className="input"
-                    type="text"
-                    name="name"
-                    value={formik.values.name}
-                    onChange={formik.handleChange}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="field is-horizontal">
-            <div className="field-label is-normal">
-              <label className="label">Descrição</label>
-            </div>
-            <div className="field-body">
-              <div className="field">
-                <div className="control">
-                  <textarea
-                    className="textarea"
-                    value={formik.values.description}
-                    name="description"
-                    placeholder="Escreva alguma coisa atrativa sobre o animalzinho"
-                    onChange={formik.handleChange}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="field is-horizontal">
-            <div className="field-label is-normal">
-              <label className="label">Foto do pet</label>
-            </div>
-            <div className="field-body">
-              <div className="field">
-                <div className="control">
-                  <div className="file has-name">
-                    <label className="file-label">
-                      <input
-                        onChange={handleChangePhoto}
-                        className="file-input"
-                        type="file"
-                        name="resume"
-                      />
-                      <span className="file-cta">
-                        <span className="file-icon">
-                          <i className="fas fa-upload" />
-                        </span>
-                        <span className="file-label">Troque a foto do pet</span>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="field is-horizontal">
-            <div className="field-label is-normal">
-              <label className="label">Tipo do pet</label>
-            </div>
-            <div className="field-body">
-              <div className="field">
-                <div className="control">
-                  <div className="is-pulled-left">
-                    <SelectPetType
-                      value={formik.values.type}
-                      onChange={(event) => {
-                        formik.setFieldValue('type', event.target.value);
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="field is-horizontal">
-            <div className="field-label is-normal">
-              <label className="label"></label>
-            </div>
-            <div className="field-body">
-              <div className="field">
-                <div className="control">
-                  <div className="is-pulled-left">
-                    <div className="is-pulled-left">
-                      <button type="submit" className="button is-link">
-                        Salvar
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          </InlineField>
+          <InlineField label={'tipo do pet'} error={errors.type}>
+            <SelectPetType
+              value={values.type}
+              onChange={(event) => {
+                setFieldValue('type', event.target.value);
+              }}
+            />
+          </InlineField>
+          <InlineField label={''} error={null}>
+            <button type="submit" className="button is-link">
+              Salvar
+            </button>
+          </InlineField>
         </form>
       </div>
     </div>
