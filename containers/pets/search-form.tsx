@@ -1,9 +1,11 @@
 import useSWR from 'swr';
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
-import PubSub from 'pubsub-js'
+import PubSub from 'pubsub-js';
+import axios from 'axios';
 
-const getCities = (url) => fetch(url).then((_) => _.json());
+const getCities = (url): Promise<string[]> =>
+  axios.get(url).then((res) => res.data);
 
 export const SearchForm = () => {
   const { data, error } = useSWR<string[]>('/api/city', getCities);

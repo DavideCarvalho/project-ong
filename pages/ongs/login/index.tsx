@@ -1,19 +1,13 @@
 import React from 'react';
 import * as Yup from 'yup';
+import axios from 'axios';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import { firebaseInstance } from '../../../utils/firebase';
 import { InlineInputField } from '../../../components/inline-input-field';
 
 const login = (url: string, idToken: string) => {
-  return fetch(`${url}`, {
-    method: 'POST',
-    headers: new Headers({
-      Accept: 'application/json',
-      'content-type': 'application/json',
-    }),
-    body: JSON.stringify({ idToken }),
-  }).then((res) => res.json());
+  return axios.post(`${url}`, { idToken }).then((res) => res.data);
 };
 
 interface LoginForm {

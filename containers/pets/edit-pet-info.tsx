@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
+import axios, { AxiosError } from 'axios';
 import useSWR from 'swr';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
@@ -29,24 +30,18 @@ interface Pet {
   type: PetTypeName;
 }
 
-const getPetById = (url, dogId) =>
-  fetch(`${url}/${dogId}`).then((res) => res.json());
+const getPetById = (url, dogId): Promise<Pet> =>
+  axios.get(`${url}/${dogId}`).then((res) => res.data);
 
 const updatePetById = (url, dogId, body) => {
-  return fetch(`${url}/${dogId}`, {
-    method: 'PUT',
-    headers: new Headers({
-      'content-type': 'application/json',
-    }),
-    body: JSON.stringify(body),
-  }).then((res) => res.json());
+  return axios.put(`${url}/${dogId}`, body).then((res) => res.data);
 };
 
 export const EditPetInfoContainer: React.FC<Props> = () => {
   const { dogId } = useContext(EditPetByIdContext);
   const router = useRouter();
-  const { data, error } = useSWR<Pet>(
-    () => ['/api/ongs/pets', dogId],
+  const { data, error } = useSWR<Pet, AxiosError>(
+    ['/api/ongs/pets', dogId],
     getPetById
   );
   const {
@@ -64,7 +59,7 @@ export const EditPetInfoContainer: React.FC<Props> = () => {
       file: '',
       type: '',
     },
-    onSubmit(values) {
+    async onSubmit(values) {
       const body = {
         name: values.name,
         description: values.description,
@@ -73,15 +68,15 @@ export const EditPetInfoContainer: React.FC<Props> = () => {
       if (values.file) {
         body.file = values.file;
       }
-      updatePetById('/api/ongs/pets', dogId, body).then((res) => {
-        toast('Pet atualizado!', {
-          position: 'top-center',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-        });
-        router.push(`/ongs/pets`);
+
+      await updatePetById('/api/ongs/pets', dogId, body);
+      toast('Pet atualizado!', {
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
       });
+      await router.push(`/ongs/pets`);
     },
   });
   useEffect(() => {
