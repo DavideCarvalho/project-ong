@@ -21,7 +21,7 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-select": "3.1.0",
-    "react-toastify": "6.0.5",
+    "react-toastify": "6.0.6",
     "rodal": "1.8.1",
     "swr": "0.2.3",
     "yup": "0.29.1"
