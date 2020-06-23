@@ -181,7 +181,7 @@ export const OngPetsListContainer: React.FC = () => {
           </div>
         </div>
       </Rodal>
-      <div className="columns">
+      <div className="columns is-multiline">
         <div className="column is-one-quarter">
           <div className="add-pet-hover image-container">
             <Link href={`/ongs/pets/create`}>
@@ -189,7 +189,7 @@ export const OngPetsListContainer: React.FC = () => {
                 <CardWithPhoto
                   petDescription={'Descrição do pet'}
                   petImageUrl={
-                    'https://i.insider.com/5df126b679d7570ad2044f3e?width=1100&format=jpeg&auto=webp'
+                    'https://cdn.onlinewebfonts.com/svg/img_28593.png'
                   }
                   petName={'Nome do pet'}
                   ongName={ong?.name}

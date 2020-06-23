@@ -3,6 +3,7 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import { firebaseInstance } from '../../../utils/firebase';
+import { InlineInputField } from '../../../components/inline-input-field';
 
 const login = (url: string, idToken: string) => {
   return fetch(`${url}`, {
@@ -33,13 +34,13 @@ const OngsLoginPage = () => {
       password: '',
     },
     validationSchema: LoginSchema,
-    async onSubmit({ email, password }) {
+    async onSubmit({ email, password }: LoginForm) {
       const { auth } = firebaseInstance();
       const { user } = await auth.signInWithEmailAndPassword(email, password);
       const idToken = await user.getIdToken();
       await login('/api/ongs/login', idToken);
       await auth.signOut();
-      router.push('/ongs/pets');
+      await router.push('/ongs/pets');
     },
   });
   return (
@@ -63,49 +64,22 @@ const OngsLoginPage = () => {
               <div className="card-content">
                 <p className="title">D.ONG</p>
                 <form onSubmit={handleSubmit}>
-                  <div className="field is-horizontal">
-                    <div className="field-label is-normal">
-                      <label className="label">Email</label>
-                    </div>
-                    <div className="field-body">
-                      <div className="field">
-                        <div className="control">
-                          <input
-                            className={`input ${
-                              errors.email ? 'is-danger' : ''
-                            }`}
-                            type="text"
-                            name="email"
-                            value={values.email}
-                            onChange={handleChange}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <p className="help is-danger">{errors.email}</p>
-                  <div className="field is-horizontal">
-                    <div className="field-label is-normal">
-                      <label className="label">Password</label>
-                    </div>
-                    <div className="field-body">
-                      <div className="field">
-                        <div className="control">
-                          <input
-                            className={`input ${
-                              errors.password ? 'is-danger' : ''
-                            }`}
-                            type="password"
-                            name="password"
-                            autoComplete="off"
-                            value={values.password}
-                            onChange={handleChange}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <p className="help is-danger">{errors.password}</p>
+                  <InlineInputField
+                    name={'email'}
+                    value={values.email}
+                    error={errors.email}
+                    handleChange={handleChange}
+                    label={'Email'}
+                    type={'email'}
+                  />
+                  <InlineInputField
+                    name={'password'}
+                    value={values.password}
+                    error={errors.password}
+                    handleChange={handleChange}
+                    label={'Senha'}
+                    type={'password'}
+                  />
                   <button className="button is-link" type="submit">
                     Login
                   </button>
