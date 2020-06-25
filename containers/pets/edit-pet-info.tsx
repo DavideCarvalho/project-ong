@@ -10,38 +10,20 @@ import { SelectPetType } from '../../components/select-pet-type';
 import { InlineInputField } from '../../components/inline-input-field';
 import { InlineTextAreaField } from '../../components/inline-text-area-field';
 import { InlineField } from '../../components/inline-field';
+import { PetDTO } from '../../types/dto/pet-dto';
 
-interface Props {}
-
-type PetTypeName = 'dog' | 'cat' | 'other';
-
-interface Ong {
-  name: string;
-  email: string;
-  phone: string;
-}
-
-interface Pet {
-  name: string;
-  id: string;
-  photoUrl: string;
-  description: string;
-  ong: Ong;
-  type: PetTypeName;
-}
-
-const getPetById = (url, dogId): Promise<Pet> =>
+const getPetById = (url, dogId): Promise<PetDTO> =>
   axios.get(`${url}/${dogId}`).then((res) => res.data);
 
 const updatePetById = (url, dogId, body) => {
   return axios.put(`${url}/${dogId}`, body).then((res) => res.data);
 };
 
-export const EditPetInfoContainer: React.FC<Props> = () => {
+export const EditPetInfoContainer: React.FC = () => {
   const { dogId } = useContext(EditPetByIdContext);
   const router = useRouter();
-  const { data, error } = useSWR<Pet, AxiosError>(
-    ['/api/ongs/pets', dogId],
+  const { data, error } = useSWR<PetDTO, AxiosError>(
+    ['/api/v1/ongs/pets', dogId],
     getPetById
   );
   const {
@@ -69,7 +51,7 @@ export const EditPetInfoContainer: React.FC<Props> = () => {
         body.file = values.file;
       }
 
-      await updatePetById('/api/ongs/pets', dogId, body);
+      await updatePetById('/api/v1/ongs/pets', dogId, body);
       toast('Pet atualizado!', {
         position: 'top-center',
         autoClose: 5000,

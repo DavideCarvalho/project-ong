@@ -8,7 +8,7 @@ const getCities = (url): Promise<string[]> =>
   axios.get(url).then((res) => res.data);
 
 export const SearchForm = () => {
-  const { data, error } = useSWR<string[]>('/api/city', getCities);
+  const { data, error } = useSWR<string[]>('/api/v1/city', getCities);
   let [options, setOptions] = useState([]);
   useEffect(() => {
     if (!data || error || !data.length) {
@@ -22,7 +22,6 @@ export const SearchForm = () => {
         { label: city, value: city.toLowerCase() },
       ];
     }
-    console.log(cityOptions);
     setOptions(() => cityOptions);
   }, [data, error]);
 

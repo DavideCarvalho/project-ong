@@ -10,6 +10,7 @@ import * as Yup from 'yup';
 import { InlineInputField } from '../../../components/inline-input-field';
 import { InlineTextAreaField } from '../../../components/inline-text-area-field';
 import { InlineField } from '../../../components/inline-field';
+import { OngDTO } from '../../../types/dto/ong-dto';
 
 type PetType = 'dog' | 'cat' | 'other';
 
@@ -18,13 +19,6 @@ interface CreatePetForm {
   description: string;
   file: string;
   type: PetType;
-}
-
-interface OngData {
-  name: string;
-  email: string;
-  phone: string;
-  id: string;
 }
 
 const CreatePetSchema = Yup.object().shape({
@@ -39,15 +33,15 @@ const CreatePetSchema = Yup.object().shape({
     .required('Tipo do pet é obrigatório'),
 });
 
-const getOngData = (url): Promise<OngData> =>
-  axios.get<OngData>(url).then((res) => res.data);
+const getOngData = (url): Promise<OngDTO> =>
+  axios.get<OngDTO>(url).then((res) => res.data);
 
 const createPet = (url, body) => {
   return axios.post(url, body).then((res) => res.data);
 };
 
 export const CreatePetContainer = () => {
-  const { data: ong } = useSWR<OngData>('/api/ongs', getOngData);
+  const { data: ong } = useSWR<OngDTO>('/api/v1/ongs', getOngData);
   const router = useRouter();
   const handleChangePhoto = (event) => {
     if (!event.target.files.length) return;
@@ -74,7 +68,7 @@ export const CreatePetContainer = () => {
     },
     validationSchema: CreatePetSchema,
     async onSubmit(values: CreatePetForm) {
-      await createPet('/api/ongs/pets', values);
+      await createPet('/api/v1/ongs/pets', values);
       toast('Pet criado!', {
         position: 'top-center',
         autoClose: 5000,

@@ -3,25 +3,12 @@ import axios, { AxiosError } from 'axios';
 import useSWR from 'swr';
 import { CardWithPhoto } from '../../components/card-with-photo';
 import PubSub from 'pubsub-js';
+import { PetDTO } from '../../types/dto/pet-dto';
 
-const getPets = async (url, cities): Promise<Pet[]> => {
-  const response = await axios.get<Pet[]>(`${url}${cities}`);
+const getPets = async (url, cities): Promise<PetDTO[]> => {
+  const response = await axios.get<PetDTO[]>(`${url}${cities}`);
   return response.data;
 };
-
-interface Ong {
-  name: string;
-  email: string;
-  phone: string;
-}
-
-interface Pet {
-  name: string;
-  id: string;
-  photoUrl: string;
-  description: string;
-  ong: Ong;
-}
 
 export const PetsListContainer = () => {
   const [cities, setCities] = useState('');
@@ -41,8 +28,8 @@ export const PetsListContainer = () => {
       }
     );
   }, []);
-  const { data, error } = useSWR<Pet[], AxiosError>(
-    ['/api/pets', cities],
+  const { data, error } = useSWR<PetDTO[], AxiosError>(
+    ['/api/v1/pets', cities],
     getPets
   );
   if (error)

@@ -5,39 +5,25 @@ import Link from 'next/link';
 import Rodal from 'rodal';
 import { toast } from 'react-toastify';
 import { CardWithPhoto } from '../../components/card-with-photo';
+import { PetDTO } from '../../types/dto/pet-dto';
+import { OngDTO } from '../../types/dto/ong-dto';
+import { PetTypeNameEnum } from '../../types/enum/pet-type-name.enum';
 
-const getOngPets = (url: string): Promise<Pet[]> =>
+interface ModalState {
+  visible: boolean;
+  dogName: string;
+  dogId: string;
+  petType: PetTypeNameEnum | '';
+}
+
+const getOngPets = (url: string): Promise<PetDTO[]> =>
   axios.get(url).then((res) => res.data);
 
 const deleteOngPet = (url: string, dogId: string): Promise<AxiosResponse> =>
   axios.delete(`${url}/${dogId}`).then((res) => res.data);
 
-const getOngData = (url): Promise<OngData> =>
+const getOngData = (url): Promise<OngDTO> =>
   axios.get(url).then((res) => res.data);
-
-interface Ong {
-  name: string;
-  email: string;
-  phone: string;
-}
-
-interface OngData {
-  name: string;
-  email: string;
-  phone: string;
-  id: string;
-}
-
-type PetType = 'dog' | 'cat' | 'other';
-
-interface Pet {
-  name: string;
-  id: string;
-  photoUrl: string;
-  description: string;
-  ong: Ong;
-  type: PetType;
-}
 
 const parsePetTypeText = (petType) => {
   if (petType === 'dog') return 'doguinho';
@@ -46,53 +32,52 @@ const parsePetTypeText = (petType) => {
 };
 
 export const OngPetsListContainer: React.FC = () => {
-  const { data: ong } = useSWR<OngData>('/api/ongs', getOngData);
-  const [modalState, setModalState] = useState({
+  const { data: ong } = useSWR<OngDTO>('/api/v1/ongs', getOngData);
+  const [modalState, setModalState] = useState<ModalState>({
     visible: false,
     dogName: '',
     dogId: '',
     petType: '',
   });
 
-  const deletePetHandler = () => {
-    deleteOngPet('/api/ongs/pets', modalState.dogId)
-      .then(() => {
-        toast('Pet deletado!', {
+  const deletePetHandler = async () => {
+    try {
+      await deleteOngPet('/api/v1/ongs/pets', modalState.dogId);
+      toast('Pet deletado!', {
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+      });
+      setModalState((state: ModalState) => ({
+        ...state,
+        visible: false,
+        dogName: '',
+        dogId: '',
+        petType: '',
+      }));
+      await mutate('/api/v1/ongs/pets');
+    } catch (e) {
+      toast.error(
+        `Oh oh! Erro ao apagar o ${parsePetTypeText(modalState.petType)}`,
+        {
           position: 'top-center',
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
-        });
-        setModalState((state) => ({
-          ...state,
-          visible: false,
-          dogName: '',
-          dogId: '',
-          petType: '',
-        }));
-        mutate('/api/ongs/pets');
-      })
-      .catch(() => {
-        toast.error(
-          `Oh oh! Erro ao apagar o ${parsePetTypeText(modalState.petType)}`,
-          {
-            position: 'top-center',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-          }
-        );
-        setModalState((state) => ({
-          ...state,
-          visible: false,
-          dogName: '',
-          dogId: '',
-          petType: '',
-        }));
-      });
+        }
+      );
+      setModalState((state) => ({
+        ...state,
+        visible: false,
+        dogName: '',
+        dogId: '',
+        petType: '',
+      }));
+    }
   };
 
-  const { data, error } = useSWR<Pet[]>('/api/ongs/pets', getOngPets);
+  const { data, error } = useSWR<PetDTO[]>('/api/v1/ongs/pets', getOngPets);
   if (error)
     return <div className="has-text-centered">Erro ao carregar os pets</div>;
   if (!data) return <div className="has-text-centered">Carregando os pets</div>;
