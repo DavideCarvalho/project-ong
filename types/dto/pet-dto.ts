@@ -1,5 +1,5 @@
 import { OngDTO } from './ong-dto';
-import { PetTypeName } from '../domain/animal-type';
+import { PetTypeNameEnum } from '../enum/pet-type-name.enum';
 
 export interface PetDTO {
   name: string;
@@ -7,5 +7,5 @@ export interface PetDTO {
   description: string;
   photoUrl: string;
   ong: OngDTO;
-  type: PetTypeName;
+  type: PetTypeNameEnum;
 }
