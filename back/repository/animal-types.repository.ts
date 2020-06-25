@@ -1,5 +1,5 @@
 import { PetTypeNameEnum } from '../../types/enum/pet-type-name.enum';
-import { firestore } from '../../pages/api/config/firebase';
+import { firestore } from '../utils/firebase';
 import { AnimalType } from '../../types/domain/animal-type';
 
 export const getAnimalTypeDoc = async (

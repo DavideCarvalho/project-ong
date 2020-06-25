@@ -1,6 +1,6 @@
 import React from 'react';
 import { NextPage } from 'next';
-import { EditPetInfoContainer } from '../../../../containers/pets/edit-pet-info';
+import { EditPetInfoContainer } from '../../../../front/containers/pets/edit-pet-info';
 
 interface Props {
   dogId: string;

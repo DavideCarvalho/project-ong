@@ -1,7 +1,7 @@
 import React from 'react';
-import { OngPetsListContainer } from '../../../containers/ongs/ong-pet-list';
+import { OngPetsListContainer } from '../../../front/containers/ongs/ong-pet-list';
 import { NextPage } from 'next';
-import '../../../containers/ongs/ong-pet-list'
+import '../../../front/containers/ongs/ong-pet-list'
 
 interface Props {}
 

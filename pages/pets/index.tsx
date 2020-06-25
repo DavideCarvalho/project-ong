@@ -1,6 +1,6 @@
 import React from 'react';
-import { PetsListContainer } from '../../containers/pets/pets-list';
-import { SearchForm } from '../../containers/pets/search-form';
+import { PetsListContainer } from '../../front/containers/pets/pets-list';
+import { SearchForm } from '../../front/containers/pets/search-form';
 
 const PetsPage = () => {
   return (

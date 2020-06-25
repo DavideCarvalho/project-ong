@@ -3,8 +3,8 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
-import { firebaseInstance } from '../../../utils/firebase';
-import { InlineInputField } from '../../../components/inline-input-field';
+import { firebaseInstance } from '../../../front/utils/firebase';
+import { InlineInputField } from '../../../front/components/inline-input-field';
 
 const login = (url: string, idToken: string) => {
   return axios.post(`${url}`, { idToken }).then((res) => res.data);

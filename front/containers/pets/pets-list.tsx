@@ -3,7 +3,7 @@ import axios, { AxiosError } from 'axios';
 import useSWR from 'swr';
 import { CardWithPhoto } from '../../components/card-with-photo';
 import PubSub from 'pubsub-js';
-import { PetDTO } from '../../types/dto/pet-dto';
+import { PetDTO } from '../../../types/dto/pet.dto';
 
 const getPets = async (url, cities): Promise<PetDTO[]> => {
   const response = await axios.get<PetDTO[]>(`${url}${cities}`);

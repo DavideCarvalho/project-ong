@@ -5,12 +5,12 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import { CardWithPhoto } from '../../components/card-with-photo';
-import { EditPetByIdContext } from '../../pages/ongs/pets/edit/[id]';
+import { EditPetByIdContext } from '../../../pages/ongs/pets/edit/[id]';
 import { SelectPetType } from '../../components/select-pet-type';
 import { InlineInputField } from '../../components/inline-input-field';
 import { InlineTextAreaField } from '../../components/inline-text-area-field';
 import { InlineField } from '../../components/inline-field';
-import { PetDTO } from '../../types/dto/pet-dto';
+import { PetDTO } from '../../../types/dto/pet.dto';
 
 const getPetById = (url, dogId): Promise<PetDTO> =>
   axios.get(`${url}/${dogId}`).then((res) => res.data);

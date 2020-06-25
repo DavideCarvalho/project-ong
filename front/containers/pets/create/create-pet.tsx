@@ -1,33 +1,32 @@
-import React from 'react';
-import axios from 'axios';
-import { useFormik } from 'formik';
-import { toast } from 'react-toastify';
-import { useRouter } from 'next/router';
-import useSWR from 'swr';
-import { CardWithPhoto } from '../../../components/card-with-photo';
-import { SelectPetType } from '../../../components/select-pet-type';
-import * as Yup from 'yup';
-import { InlineInputField } from '../../../components/inline-input-field';
-import { InlineTextAreaField } from '../../../components/inline-text-area-field';
-import { InlineField } from '../../../components/inline-field';
-import { OngDTO } from '../../../types/dto/ong-dto';
-
-type PetType = 'dog' | 'cat' | 'other';
+import React from "react";
+import axios from "axios";
+import { useFormik } from "formik";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+import useSWR from "swr";
+import { CardWithPhoto } from "../../../components/card-with-photo";
+import { SelectPetType } from "../../../components/select-pet-type";
+import * as Yup from "yup";
+import { InlineInputField } from "../../../components/inline-input-field";
+import { InlineTextAreaField } from "../../../components/inline-text-area-field";
+import { InlineField } from "../../../components/inline-field";
+import { PetTypeNameEnum } from "../../../../types/enum/pet-type-name.enum";
+import { OngDTO } from "../../../../types/dto/ong.dto";
 
 interface CreatePetForm {
   name: string;
   description: string;
   file: string;
-  type: PetType;
+  type: PetTypeNameEnum;
 }
 
 const CreatePetSchema = Yup.object().shape({
   name: Yup.string().required('Nome do pet é obrigatório'),
   description: Yup.string().required('Descrição do pet é obrigatória'),
   file: Yup.string().required('Foto do pet é obrigatório'),
-  type: Yup.mixed<PetType>()
+  type: Yup.mixed<PetTypeNameEnum>()
     .oneOf(
-      ['dog', 'cat', 'other'],
+      [PetTypeNameEnum.dog, PetTypeNameEnum.cat, PetTypeNameEnum.other],
       'Informe se o pet é um "cachorro", "gato" ou "outro"'
     )
     .required('Tipo do pet é obrigatório'),
@@ -64,7 +63,7 @@ export const CreatePetContainer = () => {
       name: '',
       description: '',
       file: '',
-      type: 'dog',
+      type: PetTypeNameEnum.dog,
     },
     validationSchema: CreatePetSchema,
     async onSubmit(values: CreatePetForm) {

@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { PetDTO } from '../../types/dto/pet-dto';
 import {
   getAllPets,
   getPetsByCities,
@@ -7,6 +6,7 @@ import {
   editPetById as editById,
   deletePetById as deleteById,
 } from '../service/pets.service';
+import { PetDTO } from '../../types/dto/pet.dto';
 
 export const getAll = async (
   req: NextApiRequest,

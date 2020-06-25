@@ -1,10 +1,10 @@
 import { getOngByEmail as getByEmail } from '../repository/ong.repository';
 import { Ong } from '../../types/domain/ong';
-import { OngDTO } from '../../types/dto/ong-dto';
 import { getAnimalTypeDoc } from '../repository/animal-types.repository';
 import { AnimalType } from '../../types/domain/animal-type';
-import { firestore, storage } from '../../pages/api/config/firebase';
+import { firestore, storage } from '../utils/firebase';
 import { Pet } from '../../types/domain/pet';
+import { OngDTO } from '../../types/dto/ong.dto';
 
 export const getOngByEmail = async (ongEmail: string): Promise<OngDTO> => {
   const ongDoc: FirebaseFirestore.QueryDocumentSnapshot<Ong> = await getByEmail(

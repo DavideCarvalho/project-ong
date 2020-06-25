@@ -1,6 +1,6 @@
 import { Ong } from '../../types/domain/ong';
 import { Pet } from '../../types/domain/pet';
-import { firestore } from '../../pages/api/config/firebase';
+import { firestore } from '../utils/firebase';
 import { City } from '../../types/domain/city';
 
 export const getAll = async (): Promise<

@@ -1,5 +1,6 @@
 import React from 'react';
 import Select from './select';
+import { PetTypeNameEnum } from '../../types/enum/pet-type-name.enum';
 
 interface Props {
   value: string;
@@ -10,15 +11,15 @@ export const SelectPetType: React.FC<Props> = ({ value, onChange }) => {
   const options = [
     {
       text: 'Cachorro',
-      value: 'dog',
+      value: PetTypeNameEnum.dog,
     },
     {
       text: 'Gato',
-      value: 'cat',
+      value: PetTypeNameEnum.cat,
     },
     {
       text: 'Outro',
-      value: 'other',
+      value: PetTypeNameEnum.other,
     },
   ];
   return (

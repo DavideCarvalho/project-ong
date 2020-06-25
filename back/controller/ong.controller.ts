@@ -1,11 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { auth } from '../../pages/api/config/firebase';
+import { auth } from '../utils/firebase';
 import { CookieSerializeOptions } from 'cookie';
 import { setCookie } from 'nookies';
 import { getPetsByOngToken } from '../service/pets.service';
-import { PetDTO } from '../../types/dto/pet-dto';
-import {OngDTO} from "../../types/dto/ong-dto";
-import {getOngByEmail, createOngPet as createPet} from "../service/ong.service";
+import {
+  getOngByEmail,
+  createOngPet as createPet,
+} from '../service/ong.service';
+import { OngDTO } from '../../types/dto/ong.dto';
+import { PetDTO } from '../../types/dto/pet.dto';
 
 const expiresIn = 60 * 60 * 24 * 5 * 1000;
 const options: CookieSerializeOptions = {
@@ -28,7 +31,7 @@ export const getOngData = async (
   const tokenId: string = req.cookies.authToken;
   const token = await auth.verifySessionCookie(tokenId);
   res.status(200).json(await getOngByEmail(token.email));
-}
+};
 
 export const getOngPets = async (
   req: NextApiRequest,

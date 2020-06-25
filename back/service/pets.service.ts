@@ -1,7 +1,4 @@
-import {
-  getOngByEmail as getByEmail,
-  getOngByEmail,
-} from '../repository/ong.repository';
+import { getOngByEmail } from '../repository/ong.repository';
 import {
   getAll,
   getPetsByCityRef,
@@ -11,13 +8,13 @@ import {
 } from '../repository/pets.repository';
 import { getCityByDocId } from '../repository/city.repository';
 import { Pet } from '../../types/domain/pet';
-import { PetDTO } from '../../types/dto/pet-dto';
-import { firestore, storage } from '../../pages/api/config/firebase';
+import { firestore, storage } from '../utils/firebase';
 import { Ong } from '../../types/domain/ong';
 import { City } from '../../types/domain/city';
 import admin from 'firebase-admin';
 import { AnimalType } from '../../types/domain/animal-type';
 import { getAnimalTypeDoc } from '../repository/animal-types.repository';
+import { PetDTO } from '../../types/dto/pet.dto';
 
 export const getAllPets = async () => {
   const petsSnapshot = await getAll();
