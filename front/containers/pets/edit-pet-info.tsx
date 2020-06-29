@@ -10,12 +10,15 @@ import { SelectPetType } from '../../components/select-pet-type';
 import { InlineInputField } from '../../components/inline-input-field';
 import { InlineTextAreaField } from '../../components/inline-text-area-field';
 import { InlineField } from '../../components/inline-field';
-import { PetDTO } from '../../../types/dto/pet.dto';
+import { PetDTO } from '../../../shared/types/dto/pet.dto';
+import { EditPetDTO } from '../../../shared/types/dto/edit-pet.dto';
+import { PetTypeNameEnum } from '../../../shared/types/enum/pet-type-name.enum';
+import { EditPetSchema } from '../../../shared/yup-schemas/edit-pet.schema';
 
-const getPetById = (url, dogId): Promise<PetDTO> =>
+const getPetById = (url: string, dogId: string): Promise<PetDTO> =>
   axios.get(`${url}/${dogId}`).then((res) => res.data);
 
-const updatePetById = (url, dogId, body) => {
+const updatePetById = (url: string, dogId: string, body: EditPetDTO) => {
   return axios.put(`${url}/${dogId}`, body).then((res) => res.data);
 };
 
@@ -39,14 +42,15 @@ export const EditPetInfoContainer: React.FC = () => {
       description: '',
       currentFile: '',
       file: '',
-      type: '',
+      type: PetTypeNameEnum.dog,
     },
+    validationSchema: EditPetSchema,
     async onSubmit(values) {
-      const body = {
+      const body: EditPetDTO = {
         name: values.name,
         description: values.description,
         type: values.type,
-      } as any;
+      };
       if (values.file) {
         body.file = values.file;
       }

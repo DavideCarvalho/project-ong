@@ -1,10 +1,11 @@
 import { getOngByEmail as getByEmail } from '../repository/ong.repository';
-import { Ong } from '../../types/domain/ong';
+import { Ong } from '../../shared/types/domain/ong';
 import { getAnimalTypeDoc } from '../repository/animal-types.repository';
-import { AnimalType } from '../../types/domain/animal-type';
+import { AnimalType } from '../../shared/types/domain/animal-type';
 import { firestore, storage } from '../utils/firebase';
-import { Pet } from '../../types/domain/pet';
-import { OngDTO } from '../../types/dto/ong.dto';
+import { Pet } from '../../shared/types/domain/pet';
+import { OngDTO } from '../../shared/types/dto/ong.dto';
+import { CreatePetDTO } from '../../shared/types/dto/create-pet.dto';
 
 export const getOngByEmail = async (ongEmail: string): Promise<OngDTO> => {
   const ongDoc: FirebaseFirestore.QueryDocumentSnapshot<Ong> = await getByEmail(
@@ -17,7 +18,7 @@ export const getOngByEmail = async (ongEmail: string): Promise<OngDTO> => {
 
 export const createOngPet = async (
   ongEmail: string,
-  { name, description, type, file }
+  { name, description, type, file }: CreatePetDTO
 ): Promise<any> => {
   const ongDoc: FirebaseFirestore.QueryDocumentSnapshot<Ong> = await getByEmail(
     ongEmail
@@ -46,5 +47,5 @@ export const createOngPet = async (
     metadata: { contentType: mimeType },
     validation: 'md5',
   });
-  return { message: 'Pet created successfully' };
+  return { message: 'Pet criado!' };
 };

@@ -1,7 +1,7 @@
-import { Ong } from '../../types/domain/ong';
-import { Pet } from '../../types/domain/pet';
+import { Ong } from '../../shared/types/domain/ong';
+import { Pet } from '../../shared/types/domain/pet';
 import { firestore } from '../utils/firebase';
-import { City } from '../../types/domain/city';
+import { City } from '../../shared/types/domain/city';
 
 export const getAll = async (): Promise<
   FirebaseFirestore.QuerySnapshot<Pet>

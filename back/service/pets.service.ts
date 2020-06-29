@@ -7,14 +7,14 @@ import {
   deletePetById as deleteById,
 } from '../repository/pets.repository';
 import { getCityByDocId } from '../repository/city.repository';
-import { Pet } from '../../types/domain/pet';
+import { Pet } from '../../shared/types/domain/pet';
 import { firestore, storage } from '../utils/firebase';
-import { Ong } from '../../types/domain/ong';
-import { City } from '../../types/domain/city';
-import admin from 'firebase-admin';
-import { AnimalType } from '../../types/domain/animal-type';
+import { Ong } from '../../shared/types/domain/ong';
+import { City } from '../../shared/types/domain/city';
+import { AnimalType } from '../../shared/types/domain/animal-type';
 import { getAnimalTypeDoc } from '../repository/animal-types.repository';
-import { PetDTO } from '../../types/dto/pet.dto';
+import { PetDTO } from '../../shared/types/dto/pet.dto';
+import { EditPetDTO } from '../../shared/types/dto/edit-pet.dto';
 
 export const getAllPets = async () => {
   const petsSnapshot = await getAll();
@@ -38,10 +38,10 @@ export const getPetsByCities = async (cities: string[]): Promise<PetDTO[]> => {
   return pets;
 };
 
-export const getPetsByOngToken = async (
-  token: admin.auth.DecodedIdToken
+export const getPetsByOngEmail = async (
+  ongEmail: string
 ): Promise<PetDTO[]> => {
-  const ongDoc = await getOngByEmail(token.email);
+  const ongDoc = await getOngByEmail(ongEmail);
   const petSnapshot = await getPetsByOngRef(ongDoc.ref);
   return parsePetsSnapshot(petSnapshot.docs);
 };
@@ -56,12 +56,12 @@ export const getPetById = async (dogId: string): Promise<PetDTO> => {
 
 export const deletePetById = async (dogId: string): Promise<any> => {
   await deleteById(dogId);
-  return { message: 'Pet deleted successfully' };
+  return { message: 'Pet excluido!' };
 };
 
 export const editPetById = async (
   dogId,
-  { name, description, type, file }
+  { name, description, type, file }: EditPetDTO
 ): Promise<any> => {
   const petDoc: FirebaseFirestore.DocumentSnapshot<Pet> = await getById(dogId);
   const animalTypeDoc: FirebaseFirestore.QueryDocumentSnapshot<AnimalType> = await getAnimalTypeDoc(
@@ -90,7 +90,7 @@ export const editPetById = async (
       validation: 'md5',
     });
   }
-  return { message: 'Pet updated successfully' };
+  return { message: 'Pet atualizado!' };
 };
 
 async function parsePetsSnapshot(

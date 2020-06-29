@@ -1,5 +1,5 @@
 import { firestore } from '../utils/firebase';
-import { City } from '../../types/domain/city';
+import { City } from '../../shared/types/domain/city';
 
 export const getAllCities = async (): Promise<
   FirebaseFirestore.QuerySnapshot<City>

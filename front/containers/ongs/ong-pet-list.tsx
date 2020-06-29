@@ -5,9 +5,9 @@ import Link from 'next/link';
 import Rodal from 'rodal';
 import { toast } from 'react-toastify';
 import { CardWithPhoto } from '../../components/card-with-photo';
-import { PetTypeNameEnum } from '../../../types/enum/pet-type-name.enum';
-import { OngDTO } from '../../../types/dto/ong.dto';
-import { PetDTO } from '../../../types/dto/pet.dto';
+import { PetTypeNameEnum } from '../../../shared/types/enum/pet-type-name.enum';
+import { OngDTO } from '../../../shared/types/dto/ong.dto';
+import { PetDTO } from '../../../shared/types/dto/pet.dto';
 
 interface ModalState {
   visible: boolean;

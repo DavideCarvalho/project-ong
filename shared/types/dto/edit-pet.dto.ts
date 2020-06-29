@@ -1,8 +1,8 @@
 import { PetTypeNameEnum } from '../enum/pet-type-name.enum';
 
-interface CreatePetDTO {
+export interface EditPetDTO {
   name: string;
   description: string;
   type: PetTypeNameEnum;
-  file: string;
+  file?: string;
 }

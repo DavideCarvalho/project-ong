@@ -1,4 +1,4 @@
-import { Ong } from '../../types/domain/ong';
+import { Ong } from '../../shared/types/domain/ong';
 import { firestore } from '../utils/firebase';
 
 export const getOngByEmail = async (

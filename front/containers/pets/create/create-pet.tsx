@@ -1,17 +1,19 @@
-import React from "react";
-import axios from "axios";
-import { useFormik } from "formik";
-import { toast } from "react-toastify";
-import { useRouter } from "next/router";
-import useSWR from "swr";
-import { CardWithPhoto } from "../../../components/card-with-photo";
-import { SelectPetType } from "../../../components/select-pet-type";
-import * as Yup from "yup";
-import { InlineInputField } from "../../../components/inline-input-field";
-import { InlineTextAreaField } from "../../../components/inline-text-area-field";
-import { InlineField } from "../../../components/inline-field";
-import { PetTypeNameEnum } from "../../../../types/enum/pet-type-name.enum";
-import { OngDTO } from "../../../../types/dto/ong.dto";
+import React from 'react';
+import axios, { AxiosResponse } from 'axios';
+import { useFormik } from 'formik';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
+import useSWR from 'swr';
+import { CardWithPhoto } from '../../../components/card-with-photo';
+import { SelectPetType } from '../../../components/select-pet-type';
+import * as Yup from 'yup';
+import { InlineInputField } from '../../../components/inline-input-field';
+import { InlineTextAreaField } from '../../../components/inline-text-area-field';
+import { InlineField } from '../../../components/inline-field';
+import { PetTypeNameEnum } from '../../../../shared/types/enum/pet-type-name.enum';
+import { OngDTO } from '../../../../shared/types/dto/ong.dto';
+import { CreatePetDTO } from '../../../../shared/types/dto/create-pet.dto';
+import { CreatePetSchema } from '../../../../shared/yup-schemas/create-pet.schema';
 
 interface CreatePetForm {
   name: string;
@@ -20,22 +22,10 @@ interface CreatePetForm {
   type: PetTypeNameEnum;
 }
 
-const CreatePetSchema = Yup.object().shape({
-  name: Yup.string().required('Nome do pet é obrigatório'),
-  description: Yup.string().required('Descrição do pet é obrigatória'),
-  file: Yup.string().required('Foto do pet é obrigatório'),
-  type: Yup.mixed<PetTypeNameEnum>()
-    .oneOf(
-      [PetTypeNameEnum.dog, PetTypeNameEnum.cat, PetTypeNameEnum.other],
-      'Informe se o pet é um "cachorro", "gato" ou "outro"'
-    )
-    .required('Tipo do pet é obrigatório'),
-});
-
 const getOngData = (url): Promise<OngDTO> =>
-  axios.get<OngDTO>(url).then((res) => res.data);
+  axios.get<OngDTO>(url).then((res: AxiosResponse<OngDTO>) => res.data);
 
-const createPet = (url, body) => {
+const createPet = (url: string, body: CreatePetDTO) => {
   return axios.post(url, body).then((res) => res.data);
 };
 

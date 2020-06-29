@@ -1,6 +1,6 @@
 import React from 'react';
 import Select from './select';
-import { PetTypeNameEnum } from '../../types/enum/pet-type-name.enum';
+import { PetTypeNameEnum } from '../../shared/types/enum/pet-type-name.enum';
 
 interface Props {
   value: string;

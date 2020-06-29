@@ -15,7 +15,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const method = methods[req.method];
   if (!method)
     return res.status(501).json({
-      message: 'Method not implemented',
+      message: 'Método não implementado',
     });
   return method(req, res);
   // if (req.method === 'GET') {

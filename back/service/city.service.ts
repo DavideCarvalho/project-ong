@@ -1,5 +1,5 @@
 import { getAllCities as getAll } from '../repository/city.repository';
-import { City } from '../../types/domain/city';
+import { City } from '../../shared/types/domain/city';
 
 export const getAllCities = async (): Promise<string[]> => {
   const cities = await getAll();
