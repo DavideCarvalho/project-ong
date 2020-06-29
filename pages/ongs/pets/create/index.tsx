@@ -1,6 +1,5 @@
-import { EditPetInfoContainer } from '../../../../containers/pets/edit-pet-info';
 import React from 'react';
-import { CreatePetContainer } from '../../../../containers/pets/create/create-pet';
+import { CreatePetContainer } from '../../../../front/containers/pets/create/create-pet';
 
 const CreatePetPage = () => {
   return (
