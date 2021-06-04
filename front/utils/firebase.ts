@@ -1,11 +1,9 @@
 import firebase from 'firebase/app';
-import getConfig from 'next/config';
 import 'firebase/analytics';
 import 'firebase/firestore';
 import 'firebase/auth';
 
-const { publicRuntimeConfig } = getConfig();
-const firebaseConfig = publicRuntimeConfig.firebaseConfig;
+const firebaseConfig = process.env.firebaseConfig;
 
 let firestore: firebase.firestore.Firestore;
 let auth: firebase.auth.Auth;
