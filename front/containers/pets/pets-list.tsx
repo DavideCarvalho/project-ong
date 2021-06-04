@@ -6,8 +6,8 @@ import PubSub from 'pubsub-js';
 import { PetDTO } from '../../../shared/types/dto/pet.dto';
 
 const getPets = async (url, cities): Promise<PetDTO[]> => {
-  const response = await axios.get<PetDTO[]>(`${url}${cities}`);
-  return response.data;
+  const { data } = await axios.get<PetDTO[]>(`${url}${cities}`);
+  return data;
 };
 
 export const PetsListContainer = () => {
