@@ -1,4 +1,4 @@
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 import 'firebase/analytics';
