@@ -1,6 +1,6 @@
 import React from 'react';
 // import Image from 'next/image';
-import { Box, Center, Text, VStack, Img } from '@chakra-ui/react';
+import { Box, Center, Text, VStack, Img, Heading } from '@chakra-ui/react';
 import { PhoneIcon } from '@chakra-ui/icons';
 import { ChakraNextImage } from './image';
 
@@ -30,18 +30,14 @@ export const CardWithPhoto: React.FC<Props> = ({
         width={400}
       />
       <Box p={6}>
-        <Box
-          mt="1"
-          fontWeight="semibold"
-          as="h4"
-          lineHeight="tight"
-          isTruncated
-        >
+        <Heading as="h2" size="xl" mt="1">
           {petName.toUpperCase()}
+        </Heading>
+        <Text mt={1} noOfLines={5}>{petDescription}</Text>
+        <Box mt={1}>
+          <PhoneIcon /> {ongPhone}
         </Box>
-        <Box>
-          <PhoneIcon /> {petDescription}
-        </Box>
+        <Text mt={1}>ONG {ongName}</Text>
       </Box>
     </Box>
   );
