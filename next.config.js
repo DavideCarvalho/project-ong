@@ -1,4 +1,7 @@
 module.exports = {
+  images: {
+    domains: ['storage.googleapis.com'],
+  },
   env: {
     firebaseConfig: {
       apiKey: process.env.FIREBASE_API_KEY,

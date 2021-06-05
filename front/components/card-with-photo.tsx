@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 interface Props {
   petImageUrl: string;
@@ -19,7 +20,13 @@ export const CardWithPhoto: React.FC<Props> = ({
     <div className="card">
       <div className="card-image">
         <figure className="image">
-          <img src={petImageUrl} alt="Placeholder image" loading="lazy" />
+          <Image
+            src={petImageUrl}
+            alt="Dog Image"
+            loading="lazy"
+            width={500}
+            height={500}
+          />
         </figure>
       </div>
       <div className="card-content">

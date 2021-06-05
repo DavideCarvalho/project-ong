@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 
-const gCloudCredentialsBuffer = new Buffer(
+const gCloudCredentialsBuffer = Buffer.from(
   process.env.GCLOUD_CREDENTIALS,
   'base64'
 );
