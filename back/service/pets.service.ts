@@ -15,6 +15,7 @@ import { AnimalType } from '../../shared/types/domain/animal-type';
 import { getAnimalTypeDoc } from '../repository/animal-types.repository';
 import { PetDTO } from '../../shared/types/dto/pet.dto';
 import { EditPetDTO } from '../../shared/types/dto/edit-pet.dto';
+import { NotFoundError } from '../common/error/not-found.error';
 
 export const getAllPets = async () => {
   const petsSnapshot = await getAll();
@@ -42,6 +43,7 @@ export const getPetsByOngEmail = async (
   ongEmail: string
 ): Promise<PetDTO[]> => {
   const ongDoc = await getOngByEmail(ongEmail);
+  if (!ongDoc) throw new NotFoundError({ description: 'Ong not found', errorCode: 'ONG_NOT_FOND' })
   const petSnapshot = await getPetsByOngRef(ongDoc.ref);
   return parsePetsSnapshot(petSnapshot.docs);
 };

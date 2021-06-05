@@ -5,9 +5,10 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import { firebaseInstance } from '../../../front/utils/firebase';
 import { InlineInputField } from '../../../front/components/inline-input-field';
+import { LoginInput } from '../../../back/interface/login.input';
 
-const login = (url: string, idToken: string) => {
-  return axios.post(`${url}`, { idToken }).then((res) => res.data);
+const login = (url: string, body: LoginInput) => {
+  return axios.post(`${url}`, body).then((res) => res.data);
 };
 
 interface LoginForm {
@@ -21,17 +22,23 @@ const LoginSchema = Yup.object().shape({
 });
 
 const OngsLoginPage = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const router = useRouter();
-  const { handleSubmit, handleChange, values, errors } = useFormik<LoginForm>({
+  const {
+    handleSubmit,
+    handleChange,
+    values,
+    errors,
+    setSubmitting,
+    isSubmitting,
+  } = useFormik<LoginForm>({
     initialValues: {
       email: '',
       password: '',
     },
     validationSchema: LoginSchema,
     async onSubmit({ email, password }: LoginForm) {
-      setIsLoading(true);
+      setSubmitting(true);
       setError('');
       const { auth } = firebaseInstance();
       let user;
@@ -39,16 +46,22 @@ const OngsLoginPage = () => {
         const token = await auth.signInWithEmailAndPassword(email, password);
         user = token.user;
       } catch (e) {
-        if (e.code !== 'auth/wrong-password' && e.code !== 'auth/user-not-found') {
+        if (
+          e.code !== 'auth/wrong-password' &&
+          e.code !== 'auth/user-not-found'
+        ) {
           setError('Erro inesperado, por favor, tente novamente');
         }
-        if (e.code === 'auth/wrong-password' || e.code === 'auth/user-not-found') {
+        if (
+          e.code === 'auth/wrong-password' ||
+          e.code === 'auth/user-not-found'
+        ) {
           setError('Usuário ou senha inválidos');
         }
-        setIsLoading(false);
+        setSubmitting(false);
       }
       const idToken = await user.getIdToken();
-      await login('/api/v1/ongs/login', idToken);
+      await login('/api/v1/ongs/login', { idToken, email });
       await auth.signOut();
       await router.push('/ongs/pets');
     },
@@ -90,10 +103,12 @@ const OngsLoginPage = () => {
                     label={'Senha'}
                     type={'password'}
                   />
-                  <p className="help is-danger" style={{fontSize: '15px'}}>{error}</p>
+                  <p className="help is-danger" style={{ fontSize: '15px' }}>
+                    {error}
+                  </p>
                   <button
                     className={`button is-link ${
-                      isLoading ? 'is-loading' : ''
+                      isSubmitting ? 'is-loading' : ''
                     }`}
                     type="submit"
                   >

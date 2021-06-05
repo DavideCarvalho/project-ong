@@ -13,6 +13,9 @@ import { CreatePetSchema } from '../../shared/yup-schemas/create-pet.schema';
 import { CreatePetDTO } from '../../shared/types/dto/create-pet.dto';
 import { CustomMessageDTO } from '../../shared/types/dto/custom-message.dto';
 import admin from 'firebase-admin';
+import { NotFoundError } from '../common/error/not-found.error';
+import { DomainErrorData } from '../common/error/domain.error';
+import { LoginInput } from '../interface/login.input';
 
 const expiresIn = 60 * 60 * 24 * 5 * 1000;
 const options: CookieSerializeOptions = {
@@ -21,11 +24,18 @@ const options: CookieSerializeOptions = {
 };
 
 export const login = async (req: NextApiRequest, res: NextApiResponse) => {
-  const sessionCookie = await auth.createSessionCookie(req.body.idToken, {
+  const { idToken, email }: LoginInput = req.body;
+  const ongDoc = getOngByEmail(email);
+  if (!ongDoc)
+    throw new NotFoundError({
+      description: 'Ong not found',
+      errorCode: 'ONG_NOT_FOND',
+    });
+  const sessionCookie = await auth.createSessionCookie(idToken, {
     expiresIn,
   });
-  setCookie({ res }, 'authToken', sessionCookie, options);
-  res.status(200).json({ message: 'Sucesso' });
+  setCookie(undefined, 'authToken', sessionCookie, options);
+  res.status(200);
 };
 
 export const getOngData = async (
@@ -46,7 +56,7 @@ export const getOngData = async (
 
 export const getOngPets = async (
   req: NextApiRequest,
-  res: NextApiResponse<PetDTO[] | CustomMessageDTO>
+  res: NextApiResponse<PetDTO[] | DomainErrorData>
 ) => {
   let token: admin.auth.DecodedIdToken;
   try {
@@ -54,10 +64,16 @@ export const getOngPets = async (
     token = await auth.verifySessionCookie(tokenId);
   } catch (e) {
     return res.status(401).json({
-      message: 'Você não tem permissão para acessar esse recurso',
+      description: `You don't have permission to access this resource`,
+      errorCode: `PERMISSION_DENIED`,
     });
   }
-  res.status(200).json(await getPetsByOngEmail(token.email));
+  try {
+    const pets = await getPetsByOngEmail(token.email);
+    res.status(200).json(pets);
+  } catch (e) {
+    if (e instanceof NotFoundError) res.status(404).json(e.data);
+  }
 };
 
 export const createOngPet = async (

@@ -23,9 +23,8 @@ export const createOngPet = async (
   const ongDoc: FirebaseFirestore.QueryDocumentSnapshot<Ong> = await getByEmail(
     ongEmail
   );
-  const animalTypeDoc: FirebaseFirestore.QueryDocumentSnapshot<AnimalType> = await getAnimalTypeDoc(
-    type
-  );
+  const animalTypeDoc: FirebaseFirestore.QueryDocumentSnapshot<AnimalType> =
+    await getAnimalTypeDoc(type);
   const pet: FirebaseFirestore.DocumentReference<Pet> = (await firestore
     .collection('pets')
     .add({
