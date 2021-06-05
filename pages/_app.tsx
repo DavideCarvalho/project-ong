@@ -7,11 +7,6 @@ import {
   ColorModeProvider,
   CSSReset,
 } from '@chakra-ui/react';
-import 'bulma/css/bulma.min.css';
-import '@creativebulma/bulma-tooltip/dist/bulma-tooltip.min.css';
-import 'animate.css/animate.min.css';
-import 'react-toastify/dist/ReactToastify.min.css';
-import 'rodal/lib/rodal.css';
 
 function MyApp({ Component, pageProps }) {
   return (
