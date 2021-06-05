@@ -1,6 +1,7 @@
 import React from 'react';
 import { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next';
 import Head from 'next/head';
+import { Center, Heading } from '@chakra-ui/react';
 import { PetsListContainer } from '../../front/containers/pets/pets-list';
 import { SearchForm } from '../../front/containers/pets/search-form';
 import { getAllPets } from '../../back/service/pets.service';
@@ -20,17 +21,22 @@ const PetsPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
         <meta name="robots" content="index,follow" />
         <meta name="rating" content="general" />
       </Head>
-      <div className="container">
-        <div className="has-text-centered" style={{ marginTop: '5%' }}>
-          <h1 className="title is-1">DONG</h1>
+      <Center w={'100%'} h={'100%'}>
+
+        <div>
+          <div className="has-text-centered" style={{ marginTop: '5%' }}>
+            <Heading as="h2" size="3xl" isTruncated>
+              D.ONG
+            </Heading>
+          </div>
+          <div style={{ marginTop: '5%' }}>
+            <SearchForm />
+          </div>
+          <div style={{ marginTop: '5%' }}>
+            <PetsListContainer pets={pets} />
+          </div>
         </div>
-        <div style={{ marginTop: '5%' }}>
-          <SearchForm />
-        </div>
-        <div style={{ marginTop: '5%' }}>
-          <PetsListContainer pets={pets} />
-        </div>
-      </div>
+      </Center>
     </>
   );
 };

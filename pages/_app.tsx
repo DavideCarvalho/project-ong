@@ -1,6 +1,12 @@
 import React from 'react';
 import Head from 'next/head';
 import { ToastContainer } from 'react-toastify';
+import {
+  ChakraProvider,
+  theme,
+  ColorModeProvider,
+  CSSReset,
+} from '@chakra-ui/react';
 import 'bulma/css/bulma.min.css';
 import '@creativebulma/bulma-tooltip/dist/bulma-tooltip.min.css';
 import 'animate.css/animate.min.css';
@@ -35,7 +41,12 @@ function MyApp({ Component, pageProps }) {
         </noscript>
       </Head>
       <ToastContainer />
-      <Component {...pageProps} />
+      <ChakraProvider theme={theme}>
+        <ColorModeProvider options={{ initialColorMode: 'dark', useSystemColorMode: true }}>
+          <CSSReset />
+          <Component {...pageProps} />
+        </ColorModeProvider>
+      </ChakraProvider>
     </>
   );
 }

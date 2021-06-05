@@ -14,10 +14,8 @@ class MyDocument extends Document {
 
   render() {
     return (
-      <Html lang={'pt'}>
-        <Head>
-          <title>Site para adoção de animais</title>
-        </Head>
+      <Html lang={'pt'} style={{ height: '100%' }}>
+        <Head />
         <body>
           <Main />
           <NextScript />

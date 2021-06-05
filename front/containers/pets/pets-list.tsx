@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 import useSWR from 'swr';
 import { CardWithPhoto } from '../../components/card-with-photo';
 import PubSub from 'pubsub-js';
 import { PetDTO } from '../../../shared/types/dto/pet.dto';
 import { getPets } from '../../service/get-pets.service';
+import { Box, SimpleGrid } from '@chakra-ui/react';
 
 interface Props {
   pets?: PetDTO[];
@@ -37,9 +38,9 @@ export const PetsListContainer: React.FC<Props> = ({ pets: petsProps }) => {
     return <div className="has-text-centered">Erro ao carregar os pets</div>;
   if (!pets) return <div className="has-text-centered">Carregando os pets</div>;
   return (
-    <div className="columns is-multiline">
+    <SimpleGrid columns={{ sm: 3, md: 4, lg: 5 }} spacing={10}>
       {pets.map((pet: PetDTO) => (
-        <div key={pet.id} className="column is-one-quarter">
+        <Box key={pet.id}>
           <CardWithPhoto
             petDescription={pet.description}
             petImageUrl={pet.photoUrl}
@@ -47,8 +48,8 @@ export const PetsListContainer: React.FC<Props> = ({ pets: petsProps }) => {
             ongName={pet.ong.name}
             ongPhone={pet.ong.phone}
           />
-        </div>
+        </Box>
       ))}
-    </div>
+    </SimpleGrid>
   );
 };
