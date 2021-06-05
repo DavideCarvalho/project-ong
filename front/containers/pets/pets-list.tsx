@@ -6,7 +6,11 @@ import PubSub from 'pubsub-js';
 import { PetDTO } from '../../../shared/types/dto/pet.dto';
 import { getPets } from '../../service/get-pets.service';
 
-export const PetsListContainer = () => {
+interface Props {
+  pets?: PetDTO[];
+}
+
+export const PetsListContainer: React.FC<Props> = ({ pets: petsProps }) => {
   const [cities, setCities] = useState('');
   useEffect(() => {
     PubSub.subscribe(
@@ -26,14 +30,15 @@ export const PetsListContainer = () => {
   }, []);
   const { data: pets, error } = useSWR<PetDTO[], AxiosError>(
     ['/api/v1/pets', cities],
-    getPets
+    getPets,
+    { initialData: petsProps }
   );
   if (error)
     return <div className="has-text-centered">Erro ao carregar os pets</div>;
   if (!pets) return <div className="has-text-centered">Carregando os pets</div>;
   return (
     <div className="columns is-multiline">
-      {pets.map((pet) => (
+      {pets.map((pet: PetDTO) => (
         <div key={pet.id} className="column is-one-quarter">
           <CardWithPhoto
             petDescription={pet.description}

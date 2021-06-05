@@ -9,10 +9,6 @@ import { PetDTO } from '../../shared/types/dto/pet.dto';
 const PetsPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   pets,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  useEffect(() => {
-    if (pets?.length === 0) return;
-    mutate('/api/v1/pets', pets);
-  }, [pets]);
   return (
     <div className="container">
       <div className="has-text-centered" style={{ marginTop: '5%' }}>
@@ -22,7 +18,7 @@ const PetsPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
         <SearchForm />
       </div>
       <div style={{ marginTop: '5%' }}>
-        <PetsListContainer />
+        <PetsListContainer pets={pets} />
       </div>
     </div>
   );
