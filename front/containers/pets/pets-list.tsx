@@ -6,6 +6,7 @@ import PubSub from 'pubsub-js';
 import { PetDTO } from '../../../shared/types/dto/pet.dto';
 import { getPets } from '../../service/get-pets.service';
 import { Box, SimpleGrid } from '@chakra-ui/react';
+import { SocialProfileSimple } from '../../components/new-card';
 
 interface Props {
   pets?: PetDTO[];
@@ -41,7 +42,14 @@ export const PetsListContainer: React.FC<Props> = ({ pets: petsProps }) => {
     <SimpleGrid columns={{ sm: 3, md: 4, lg: 5 }} spacing={10}>
       {pets.map((pet: PetDTO) => (
         <Box key={pet.id}>
-          <CardWithPhoto
+          {/*<CardWithPhoto*/}
+          {/*  petDescription={pet.description}*/}
+          {/*  petImageUrl={pet.photoUrl}*/}
+          {/*  petName={pet.name}*/}
+          {/*  ongName={pet.ong.name}*/}
+          {/*  ongPhone={pet.ong.phone}*/}
+          {/*/>*/}
+          <SocialProfileSimple
             petDescription={pet.description}
             petImageUrl={pet.photoUrl}
             petName={pet.name}
