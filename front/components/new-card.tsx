@@ -1,17 +1,17 @@
 import {
   Heading,
-  Avatar,
   Box,
   Center,
   Text,
   Stack,
+  VStack,
   Button,
-  Link,
   Badge,
   useColorModeValue,
 } from '@chakra-ui/react';
 import React from 'react';
-import { ChakraNextImage } from './image';
+import { RoundImage } from './round-image';
+import { PhoneIcon } from '@chakra-ui/icons';
 
 interface Props {
   petImageUrl: string;
@@ -40,7 +40,7 @@ export const SocialProfileSimple: React.FC<Props> = ({
         textAlign={'center'}
       >
         <Center>
-          <ChakraNextImage
+          <RoundImage
             src={petImageUrl}
             alt={'Avatar Alt'}
             mb={4}
@@ -49,14 +49,6 @@ export const SocialProfileSimple: React.FC<Props> = ({
             width={100}
           />
         </Center>
-        {/*<*/}
-        {/*  Avatar*/}
-        {/*  size={'xl'}*/}
-        {/*  src={petImageUrl}*/}
-        {/*  alt={'Avatar Alt'}*/}
-        {/*  mb={4}*/}
-        {/*  pos={'relative'}*/}
-        {/*/>*/}
         <Heading fontSize={'2xl'} fontFamily={'body'}>
           {petName}
         </Heading>
@@ -71,63 +63,13 @@ export const SocialProfileSimple: React.FC<Props> = ({
           {petDescription}
         </Text>
 
-        <Stack align={'center'} justify={'center'} direction={'row'} mt={6}>
-          <Badge
-            px={2}
-            py={1}
-            bg={useColorModeValue('gray.50', 'gray.800')}
-            fontWeight={'400'}
-          >
-            #art
-          </Badge>
-          <Badge
-            px={2}
-            py={1}
-            bg={useColorModeValue('gray.50', 'gray.800')}
-            fontWeight={'400'}
-          >
-            #photography
-          </Badge>
-          <Badge
-            px={2}
-            py={1}
-            bg={useColorModeValue('gray.50', 'gray.800')}
-            fontWeight={'400'}
-          >
-            #music
-          </Badge>
-        </Stack>
-
-        <Stack mt={8} direction={'row'} spacing={4}>
-          <Button
-            flex={1}
-            fontSize={'sm'}
-            rounded={'full'}
-            _focus={{
-              bg: 'gray.200',
-            }}
-          >
-            Message
-          </Button>
-          <Button
-            flex={1}
-            fontSize={'sm'}
-            rounded={'full'}
-            bg={'blue.400'}
-            color={'white'}
-            boxShadow={
-              '0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)'
-            }
-            _hover={{
-              bg: 'blue.500',
-            }}
-            _focus={{
-              bg: 'blue.500',
-            }}
-          >
-            Follow
-          </Button>
-        </Stack>
+        <Text
+          textAlign={'left'}
+          color={useColorModeValue('gray.700', 'gray.400')}
+          px={3}
+        >
+          <PhoneIcon /> {ongPhone}
+        </Text>
       </Box>
     </Center>
   );

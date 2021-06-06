@@ -2,7 +2,7 @@ import React from 'react';
 // import Image from 'next/image';
 import { Box, Center, Text, VStack, Img, Heading } from '@chakra-ui/react';
 import { PhoneIcon } from '@chakra-ui/icons';
-import { ChakraNextImage } from './image';
+import { RoundImage } from './round-image';
 
 interface Props {
   petImageUrl: string;
@@ -21,7 +21,7 @@ export const CardWithPhoto: React.FC<Props> = ({
 }) => {
   return (
     <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
-      <ChakraNextImage
+      <RoundImage
         src={petImageUrl}
         alt="Dog Image"
         objectFit={'contain'}
