@@ -1,5 +1,8 @@
 import React from 'react';
-import Image from 'next/image';
+// import Image from 'next/image';
+import { Box, Center, Text, VStack, Img, Heading } from '@chakra-ui/react';
+import { PhoneIcon } from '@chakra-ui/icons';
+import { RoundImage } from './round-image';
 
 interface Props {
   petImageUrl: string;
@@ -17,30 +20,25 @@ export const CardWithPhoto: React.FC<Props> = ({
   ongPhone,
 }) => {
   return (
-    <div className="card">
-      <div className="card-image">
-        <figure className="image">
-          <Image
-            src={petImageUrl}
-            alt="Dog Image"
-            loading="lazy"
-            width={500}
-            height={500}
-          />
-        </figure>
-      </div>
-      <div className="card-content">
-        <div className="media">
-          <div className="media-content">
-            <p className="title is-4">
-              {petName} - {ongName}
-            </p>
-          </div>
-        </div>
-
-        <div className="content">{petDescription}</div>
-        <div className="content">Telefone: {ongPhone}</div>
-      </div>
-    </div>
+    <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
+      <RoundImage
+        src={petImageUrl}
+        alt="Dog Image"
+        objectFit={'contain'}
+        loading="lazy"
+        height={400}
+        width={400}
+      />
+      <Box p={6}>
+        <Heading as="h2" size="xl" mt="1">
+          {petName.toUpperCase()}
+        </Heading>
+        <Text mt={1} noOfLines={5}>{petDescription}</Text>
+        <Box mt={1}>
+          <PhoneIcon /> {ongPhone}
+        </Box>
+        <Text mt={1}>ONG {ongName}</Text>
+      </Box>
+    </Box>
   );
 };

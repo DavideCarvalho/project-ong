@@ -6,7 +6,6 @@ import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import { CardWithPhoto } from '../../../components/card-with-photo';
 import { SelectPetType } from '../../../components/select-pet-type';
-import * as Yup from 'yup';
 import { InlineInputField } from '../../../components/inline-input-field';
 import { InlineTextAreaField } from '../../../components/inline-text-area-field';
 import { InlineField } from '../../../components/inline-field';
