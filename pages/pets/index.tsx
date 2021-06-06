@@ -2,6 +2,7 @@ import React from 'react';
 import { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next';
 import Head from 'next/head';
 import { Center, Heading } from '@chakra-ui/react';
+import superjson from 'superjson';
 import { PetsListContainer } from '../../front/containers/pets/pets-list';
 import { SearchForm } from '../../front/containers/pets/search-form';
 import { getAllPets } from '../../back/service/pets.service';
@@ -22,7 +23,6 @@ const PetsPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
         <meta name="rating" content="general" />
       </Head>
       <Center w={'100%'} h={'100%'}>
-
         <div>
           <div className="has-text-centered" style={{ marginTop: '5%' }}>
             <Heading as="h2" size="3xl" isTruncated>
@@ -33,7 +33,7 @@ const PetsPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
             <SearchForm />
           </div>
           <div style={{ marginTop: '5%' }}>
-            <PetsListContainer pets={pets} />
+            <PetsListContainer pets={superjson.parse<PetDTO[]>(pets)} />
           </div>
         </div>
       </Center>
@@ -41,13 +41,13 @@ const PetsPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   );
 };
 
-export const getStaticProps: GetStaticProps<{ pets: PetDTO[] }> = async (
+export const getStaticProps: GetStaticProps<{ pets: string }> = async (
   context
 ) => {
   const pets = await getAllPets();
   return {
     props: {
-      pets,
+      pets: superjson.stringify(pets),
     },
   };
 };

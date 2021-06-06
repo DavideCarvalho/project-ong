@@ -16,6 +16,7 @@
     "@emotion/styled": "11.3.0",
     "animate.css": "4.1.1",
     "axios": "0.21.1",
+    "babel-plugin-superjson-next": "^0.3.0",
     "bulma": "0.9.2",
     "firebase": "8.6.5",
     "firebase-admin": "9.9.0",
@@ -29,6 +30,7 @@
     "react-select": "4.3.1",
     "react-toastify": "7.0.4",
     "rodal": "1.8.1",
+    "superjson": "^1.7.4",
     "swr": "0.5.6",
     "yup": "0.32.9"
   },

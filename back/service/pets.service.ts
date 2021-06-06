@@ -25,14 +25,10 @@ export const getAllPets = async () => {
 export const getPetsByCities = async (cities: string[]): Promise<PetDTO[]> => {
   let pets: PetDTO[] = [];
   for (const city of cities) {
-    const cityDoc: FirebaseFirestore.DocumentSnapshot<City> = await getCityByDocId(
-      city.toLowerCase()
-    );
-    const {
-      docs,
-    }: FirebaseFirestore.QuerySnapshot<Pet> = await getPetsByCityRef(
-      cityDoc.ref
-    );
+    const cityDoc: FirebaseFirestore.DocumentSnapshot<City> =
+      await getCityByDocId(city.toLowerCase());
+    const { docs }: FirebaseFirestore.QuerySnapshot<Pet> =
+      await getPetsByCityRef(cityDoc.ref);
     const parsedPets = await parsePetsSnapshot(docs);
     pets = [...pets, ...parsedPets];
   }
@@ -43,7 +39,11 @@ export const getPetsByOngEmail = async (
   ongEmail: string
 ): Promise<PetDTO[]> => {
   const ongDoc = await getOngByEmail(ongEmail);
-  if (!ongDoc) throw new NotFoundError({ description: 'Ong not found', errorCode: 'ONG_NOT_FOND' })
+  if (!ongDoc)
+    throw new NotFoundError({
+      description: 'Ong not found',
+      errorCode: 'ONG_NOT_FOND',
+    });
   const petSnapshot = await getPetsByOngRef(ongDoc.ref);
   return parsePetsSnapshot(petSnapshot.docs);
 };
@@ -66,9 +66,8 @@ export const editPetById = async (
   { name, description, type, file }: EditPetDTO
 ): Promise<any> => {
   const petDoc: FirebaseFirestore.DocumentSnapshot<Pet> = await getById(dogId);
-  const animalTypeDoc: FirebaseFirestore.QueryDocumentSnapshot<AnimalType> = await getAnimalTypeDoc(
-    type
-  );
+  const animalTypeDoc: FirebaseFirestore.QueryDocumentSnapshot<AnimalType> =
+    await getAnimalTypeDoc(type);
   await firestore
     .collection('pets')
     .doc(dogId)
@@ -113,6 +112,8 @@ async function parsePetsSnapshot(
       ...petData,
       id: docId,
       ong: { ...ongData, city: cityValue.data().name, id: cityValue.id },
+      age: petData.age.toDate(),
+      rescuedDate: petData.age.toDate(),
       type: typeValue.data().name,
       photoUrl: petPhoto[0],
     };

@@ -6,6 +6,11 @@ export interface PetDTO {
   id: string;
   description: string;
   photoUrl: string;
+  eyes: string;
+  breed: string;
+  fur: string;
+  age: Date;
+  rescuedDate: Date;
   ong: OngDTO;
   type: PetTypeNameEnum;
 }
