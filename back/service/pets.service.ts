@@ -58,7 +58,6 @@ export const getPetById = async (dogId: string): Promise<PetDTO> => {
 
 export const deletePetById = async (dogId: string): Promise<any> => {
   await deleteById(dogId);
-  return { message: 'Pet excluido!' };
 };
 
 export const editPetById = async (

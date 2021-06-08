@@ -54,7 +54,8 @@ export const deletePetById = async (
       message: 'Você não tem permissão para acessar esse recurso',
     });
   }
-  res.status(200).json(await deleteById(req.query.id as string));
+  await deleteById(req.query.id as string);
+  res.status(200);
 };
 
 export const editPetById = async (
