@@ -33,7 +33,7 @@ const PetsPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
             <SearchForm />
           </div>
           <div style={{ marginTop: '5%' }}>
-            <PetsListContainer pets={superjson.parse<PetDTO[]>(pets)} />
+            <PetsListContainer pets={pets} />
           </div>
         </div>
       </Center>
@@ -41,13 +41,11 @@ const PetsPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   );
 };
 
-export const getStaticProps: GetStaticProps<{ pets: string }> = async (
-  context
-) => {
+export const getStaticProps: GetStaticProps = async (context) => {
   const pets = await getAllPets();
   return {
     props: {
-      pets: superjson.stringify(pets),
+      pets,
     },
   };
 };
