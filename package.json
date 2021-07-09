@@ -40,7 +40,7 @@
     "@types/pubsub-js": "1.8.2",
     "@types/react": "17.0.10",
     "@types/react-select": "4.0.15",
-    "@types/yup": "0.29.11",
+    "@types/yup": "0.29.13",
     "prettier": "2.3.1",
     "typescript": "4.3.2"
   }
